@@ -71,19 +71,25 @@
     // })
 
     function handleClick() {
-        console.log('Sending your message', message);
-        channelA.send({
+        if (username && message) {
+            console.log('Sending your message', message);
+            channelA.send({
                 type: 'broadcast',
                 event: 'test',
-                payload: { message: message },
+                payload: { message: `Message from ${username} says: ${message}` },
             })
+        }
     }
 
+    let username = '';
     let message = '';
 </script>
 
+Username: <input bind:value={username} placeholder="enter your Username"/>
 
-Message: <input bind:value={message} placeholder="enter your message"/>
-<button on:click={handleClick}>
-	Click to send your message!
-</button>
+{#if username}
+    Message: <input bind:value={message} placeholder="enter your message"/>
+    <button on:click={handleClick}>
+        Click to send your message!
+    </button>
+{/if}
