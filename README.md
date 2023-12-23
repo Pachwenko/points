@@ -36,3 +36,14 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+
+# [Supabase](https://supabase.com/)
+
+We make heavy use of supabase, for auth, db, realtime events, and more.
+
+Client documentaton https://supabase.com/docs/reference/javascript/
+Auth documentation https://supabase.com/docs/guides/auth/auth-helpers/sveltekit
+
+
+# [Tailwind](https://tailwindcss.com/)
