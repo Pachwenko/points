@@ -12,8 +12,6 @@
 		"/auth",
 		"/auth/__data.json",
 		"/profile",
-		"/profile/__data.json",
-		"/testDataFetching",
-		"/testDataFetching/__data.json"
+		"/profile/__data.json"
 	]
 }
