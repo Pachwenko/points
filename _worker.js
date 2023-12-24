@@ -8610,8 +8610,8 @@ var init__ = __esm({
     component = async () => component_cache ??= (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default;
     universal_id = "src/routes/+layout.js";
     server_id = "src/routes/+layout.server.js";
-    imports = ["_app/immutable/nodes/0.t9ZZrQ8M.js", "_app/immutable/chunks/index.GQbBJPuZ.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.8oxJKiNT.js", "_app/immutable/chunks/navigation.8a9JcXl1.js", "_app/immutable/chunks/singletons.0dSZim2e.js", "_app/immutable/chunks/index.e6102C95.js"];
-    stylesheets = ["_app/immutable/assets/0.UxFFfyoU.css"];
+    imports = ["_app/immutable/nodes/0.ZJlrn4Ka.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.uKyVMVU-.js", "_app/immutable/chunks/navigation.57qXH2xT.js", "_app/immutable/chunks/singletons.QgQTIIDG.js"];
+    stylesheets = ["_app/immutable/assets/0.B7wY3ruV.css"];
     fonts = [];
   }
 });
@@ -8669,7 +8669,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ??= (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    imports2 = ["_app/immutable/nodes/1.w-xaK5sM.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.8oxJKiNT.js", "_app/immutable/chunks/singletons.0dSZim2e.js", "_app/immutable/chunks/index.e6102C95.js"];
+    imports2 = ["_app/immutable/nodes/1.lHiJ36gX.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.uKyVMVU-.js", "_app/immutable/chunks/singletons.QgQTIIDG.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -8680,55 +8680,22 @@ var page_svelte_exports = {};
 __export(page_svelte_exports, {
   default: () => Page
 });
-function playerLeft(payload) {
-  console.log("player left", payload);
-}
-function playerVoted(payload) {
-  console.log("player voted", payload);
-}
-function clearVotes(payload) {
-  console.log("clear votes", payload);
-}
-var useReceivedMessages, otherPlayers, channelID, SUPABASE_URL, SUPABASE_KEY, Page;
+var useReceivedMessages, Page;
 var init_page_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/_page.svelte.js"() {
     init_ssr();
-    init_module6();
     init_index2();
     useReceivedMessages = writable([]);
-    otherPlayers = writable([]);
-    channelID = "room1";
-    SUPABASE_URL = "https://otnrjsuiprjpbjvwsyrv.supabase.co";
-    SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90bnJqc3VpcHJqcGJqdndzeXJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDI1OTkzODcsImV4cCI6MjAxODE3NTM4N30.RZp9Y6FAhq9M2QK7AAq0eLsq-9QZ0kUZIKfS0Q8M-MM";
     Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      let $$unsubscribe_otherPlayers;
       let $useReceivedMessages, $$unsubscribe_useReceivedMessages;
-      $$unsubscribe_otherPlayers = subscribe(otherPlayers, (value) => value);
       $$unsubscribe_useReceivedMessages = subscribe(useReceivedMessages, (value) => $useReceivedMessages = value);
-      const eventTypes = {
-        PLAYER_JOINED: "PLAYER_JOINED",
-        PLAYER_LEFT: "PLAYER_LEFT",
-        // TODO: implenent this, trigger on a browser event?
-        VOTED: "VOTED",
-        CLEAR_COTES: "CLEAR_VOTES"
-      };
-      const client = createClient(SUPABASE_URL, SUPABASE_KEY);
-      const channelA = client.channel(channelID);
-      let username = "";
-      function playerJoined(payload) {
-        otherPlayers.update((players) => [...players, payload.payload.name]);
-        console.log("player joined", payload);
-      }
-      channelA.subscribe();
-      channelA.on("broadcast", { event: eventTypes.PLAYER_JOINED }, (payload) => playerJoined(payload));
-      channelA.on("broadcast", { event: eventTypes.PLAYER_LEFT }, (payload) => playerLeft(payload));
-      channelA.on("broadcast", { event: eventTypes.VOTED }, (payload) => playerVoted(payload));
-      channelA.on("broadcast", { event: eventTypes.CLEAR_COTES }, (payload) => clearVotes(payload));
-      $$unsubscribe_otherPlayers();
+      let { data } = $$props;
+      if ($$props.data === void 0 && $$bindings.data && data !== void 0)
+        $$bindings.data(data);
       $$unsubscribe_useReceivedMessages();
-      return ` <div class="bg-gray-900 text-white p-8 min-h-screen flex flex-col justify-center items-center">Username: <input class="bg-gray-800 text-white p-3 border-2 border-blue-500 rounded mb-4" placeholder="Enter your Username"${add_attribute("value", username, 0)}> <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-svelte-h="svelte-jojf7d">Enter Pointing Session</button> ${``}  <ul class="mt-4 w-full max-w-md">${each($useReceivedMessages, (msg) => {
+      return `${data.session ? ` <div class="container bg-gray-900 text-white p-8 min-h-screen flex flex-col justify-center items-center"><h1 data-svelte-h="svelte-1aajuir">Welcome to spring Pointing!</h1> ${`<p data-svelte-h="svelte-u9upty">Current display name: loading...</p>`} <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-svelte-h="svelte-ymknhj">Start new Pointing Session</button> ${``}  <ul class="mt-4 w-full max-w-md">${each($useReceivedMessages, (msg) => {
         return `<li class="bg-gray-800 p-3 border-2 border-blue-500 rounded mb-2">${escape(msg)}</li>`;
-      })}</ul></div>`;
+      })}</ul></div>` : ``}`;
     });
   }
 });
@@ -8747,7 +8714,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ??= (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    imports3 = ["_app/immutable/nodes/2.gBgFIeXh.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.8oxJKiNT.js", "_app/immutable/chunks/index.GQbBJPuZ.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/index.e6102C95.js"];
+    imports3 = ["_app/immutable/nodes/2.G0YNSLqn.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.uKyVMVU-.js", "_app/immutable/chunks/singletons.QgQTIIDG.js", "_app/immutable/chunks/navigation.57qXH2xT.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -8787,7 +8754,7 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ??= (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default;
-    imports4 = ["_app/immutable/nodes/3.hsm43YK2.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.8oxJKiNT.js", "_app/immutable/chunks/navigation.8a9JcXl1.js", "_app/immutable/chunks/singletons.0dSZim2e.js", "_app/immutable/chunks/index.e6102C95.js"];
+    imports4 = ["_app/immutable/nodes/3.LW_ypGiw.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.uKyVMVU-.js", "_app/immutable/chunks/navigation.57qXH2xT.js", "_app/immutable/chunks/singletons.QgQTIIDG.js"];
     stylesheets4 = [];
     fonts4 = [];
   }
@@ -8847,7 +8814,7 @@ var init__5 = __esm({
     index5 = 4;
     component5 = async () => component_cache5 ??= (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default;
     universal_id2 = "src/routes/points/[slug]/+page.js";
-    imports5 = ["_app/immutable/nodes/4.0WDF4Y8k.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.8oxJKiNT.js"];
+    imports5 = ["_app/immutable/nodes/4.asGjXCew.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.uKyVMVU-.js"];
     stylesheets5 = [];
     fonts5 = [];
   }
@@ -8888,7 +8855,7 @@ var init__6 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     index6 = 5;
     component6 = async () => component_cache6 ??= (await Promise.resolve().then(() => (init_page_svelte4(), page_svelte_exports4))).default;
-    imports6 = ["_app/immutable/nodes/5.vuQaOoPA.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.8oxJKiNT.js", "_app/immutable/chunks/navigation.8a9JcXl1.js", "_app/immutable/chunks/singletons.0dSZim2e.js", "_app/immutable/chunks/index.e6102C95.js"];
+    imports6 = ["_app/immutable/nodes/5.Fyb1VDJv.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.uKyVMVU-.js", "_app/immutable/chunks/navigation.57qXH2xT.js", "_app/immutable/chunks/singletons.QgQTIIDG.js"];
     stylesheets6 = [];
     fonts6 = [];
   }
@@ -8953,7 +8920,7 @@ var init__7 = __esm({
   ".svelte-kit/output/server/nodes/6.js"() {
     index7 = 6;
     component7 = async () => component_cache7 ??= (await Promise.resolve().then(() => (init_page_svelte5(), page_svelte_exports5))).default;
-    imports7 = ["_app/immutable/nodes/6.OpVtfubD.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.8oxJKiNT.js"];
+    imports7 = ["_app/immutable/nodes/6.4d4_pyLD.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.uKyVMVU-.js"];
     stylesheets7 = [];
     fonts7 = [];
   }
@@ -9163,7 +9130,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1l6bo8p"
+  version_hash: "b9afrt"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -12552,7 +12519,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set(["favicon.png"]),
     mimeTypes: { ".png": "image/png" },
     _: {
-      client: { "start": "_app/immutable/entry/start.Guq3glZ1.js", "app": "_app/immutable/entry/app.hTk0GqvV.js", "imports": ["_app/immutable/entry/start.Guq3glZ1.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/singletons.0dSZim2e.js", "_app/immutable/chunks/index.e6102C95.js", "_app/immutable/entry/app.hTk0GqvV.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.8oxJKiNT.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
+      client: { "start": "_app/immutable/entry/start.XnUyWIRi.js", "app": "_app/immutable/entry/app.j9xvCbXu.js", "imports": ["_app/immutable/entry/start.XnUyWIRi.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/singletons.QgQTIIDG.js", "_app/immutable/entry/app.j9xvCbXu.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.uKyVMVU-.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
