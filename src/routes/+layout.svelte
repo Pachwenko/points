@@ -23,4 +23,30 @@
     });
 </script>
 
-<slot />
+
+<body class="flex flex-col h-screen">
+  <header class="bg-gray-800 text-white p-4">
+        <div class="flex justify-between items-center">
+            <div>
+                <a href="/" class="text-xl hover:text-gray-300">Home</a>
+            </div>
+            <div>
+                {#if data.session}
+                    <a href="/profile" class="text-xl hover:text-gray-300">Profile</a>
+                {:else}
+                    <a href="/auth" class="text-xl hover:text-gray-300">Sign In</a>
+                {/if}
+            </div>
+        </div>
+  </header>
+
+  <main class="flex-grow bg-gray-800 w-full">
+    <slot />
+  </main>
+
+  <footer class="bg-gray-800 text-white p-4 fixed bottom-0 inset-x-0">
+        <div class="flex justify-center">
+            <a target="_blank" href="https://github.com/Pachwenko/points" class="text-xl hover:text-gray-300">Source</a>
+        </div>
+  </footer>
+</body>

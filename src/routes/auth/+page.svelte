@@ -38,8 +38,8 @@
   // } // TODO: put sign out somewhere else? profile?
 </script>
 
-<div class="min-h-screen flex justify-center items-center bg-gray-900">
-  <form on:submit="{handleSignUp}" class="bg-gray-800 p-6 rounded-lg w-full max-w-md">
+<div class="flex flex-grow min-h-full justify-center items-center bg-gray-900">
+  <form on:submit="{handleSignUp}" class="container mx-auto bg-gray-800 p-6 rounded-lg w-full max-w-md">
     <p class="text-2xl text-gray-300">Welcome! This site is completely free to use, but you must sign up first!</p>
     <div class="mb-4">
       <label for="email" class="block text-gray-300 mb-2">Email</label>
