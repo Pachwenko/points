@@ -6,105 +6,68 @@
      * Made by Patrick aka Pachwenko
      * https://github.com/Pachwenko
      */
-    import { createClient } from '@supabase/supabase-js';
 
     import { useReceivedMessages, otherPlayers } from '$lib/store.js';
-    // const receivedMessages2 = useReceivedMessages;
-    import { v4 as uuidv4 } from 'uuid';
-    // const channelID = uuidv4();
-    const channelID = 'room1';
-    const eventTypes = {
-        PLAYER_JOINED: 'PLAYER_JOINED',
-        PLAYER_LEFT: 'PLAYER_LEFT',  // TODO: implenent this, trigger on a browser event?
-        VOTED: 'VOTED',
-        CLEAR_COTES: 'CLEAR_VOTES'
+    import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
+
+    export let data
+    let { supabase } = data
+    $: ({ supabase } = data)
+    let activeSessions = undefined;
+    let currentUserProfile = undefined;
+
+    async function startPointingSession() {
+        const {data2, error} = await supabase.from('PointingSession').insert({
+            last_updated: new Date().toISOString(),
+            player_data: {},
+            users: data?.session.user.id
+        });
+        console.log('started new session', data2, error);
     }
 
 
-    const SUPABASE_URL = 'https://otnrjsuiprjpbjvwsyrv.supabase.co'
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90bnJqc3VpcHJqcGJqdndzeXJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDI1OTkzODcsImV4cCI6MjAxODE3NTM4N30.RZp9Y6FAhq9M2QK7AAq0eLsq-9QZ0kUZIKfS0Q8M-MM'
-
-    const client = createClient(SUPABASE_URL, SUPABASE_KEY);
-    const channelA = client.channel(channelID);
-
-    let showPointingSession = false;
-    let username = '';
-    // let message = '';
-
-    // callbacks to the realtime events
-    function playerJoined(payload) {
-        otherPlayers.update(players => [...players, payload.payload.name])
-        console.log('player joined', payload);
-    }
-    function playerLeft(payload) {
-        console.log('player left', payload);
-    }
-    function playerVoted(payload) {
-        // TODO: handle adding player to list if not already there
-        console.log('player voted', payload);
-    }
-    function clearVotes(payload) {
-        console.log('clear votes', payload);
-    }
-
-    // Subscribe to the Channel
-    channelA.subscribe();
-    channelA
-    .on(
-        'broadcast',
-        { event: eventTypes.PLAYER_JOINED },
-        (payload) => playerJoined(payload)
-    )
-    channelA
-    .on(
-        'broadcast',
-        { event: eventTypes.PLAYER_LEFT },
-        (payload) => playerLeft(payload)
-    )
-    channelA
-    .on(
-        'broadcast',
-        { event: eventTypes.VOTED },
-        (payload) => playerVoted(payload)
-    )
-    channelA
-    .on(
-        'broadcast',
-        { event: eventTypes.CLEAR_COTES },
-        (payload) => clearVotes(payload)
-    )
-
-    // regular functions
-    function joinPointingSession() {
-        if (username) {
-            showPointingSession = true;
-            channelA.send({
-                type: 'broadcast',
-                event: eventTypes.PLAYER_JOINED,
-                payload: {
-                    name: username
-                }
-            })
+	onMount(async () => {
+        if (!data.session) {
+            goto('/auth');
         }
-    }
+        // should only ever return one (the current user's profile)
+        const { data: result } = await supabase.from('PointingSession').select('*').limit(10);
+        if (result && result.length > 0) {
+            activeSessions = result;
+        }
+        const { data2: result2 } = await supabase.from('profiles').select('*').limit(1);
+        if (result2 && result2.length > 0) {
+            currentUserProfile = result2[0];
+        } else {
+            currentUserProfile = { display_name: 'default' }
+        }
+	});
+
 
 </script>
 
 
+{#if data.session}
 <!-- Your updated template with increased border size and full-screen layout -->
-<div class="bg-gray-900 text-white p-8 min-h-screen flex flex-col justify-center items-center">
-    Username: <input class="bg-gray-800 text-white p-3 border-2 border-blue-500 rounded mb-4" bind:value={username} placeholder="Enter your Username" />
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" on:click={joinPointingSession}>
-        Enter Pointing Session
+<div class="container bg-gray-900 text-white p-8 min-h-screen flex flex-col justify-center items-center">
+    <h1>Welcome to spring Pointing!</h1>
+
+    {#if currentUserProfile}
+        <p>Current display name: {currentUserProfile.display_name}</p>
+    {:else}
+        <p>Current display name: loading...</p>
+    {/if}
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" on:click={startPointingSession}>
+        Start new Pointing Session
     </button>
 
-    {#if showPointingSession}
+    {#if activeSessions}
         <div>
-            Players:
+            Previous Sessions:
             <ul>
-                <li>{username}</li>
-                {#each $otherPlayers as player}
-                <li>{player}</li>
+                {#each activeSessions as session}
+                <li><a href="/points/{session.id}/">{session.id} - {session.last_updated}</a></li>
                 {/each}
             </ul>
         </div>
@@ -127,3 +90,4 @@
     </ul>
 
 </div>
+{/if}
