@@ -38,14 +38,19 @@
         }
     }
 
+    const handleSignOut = async () => {
+        await supabase.auth.signOut()
+        goto('/auth');
+    }
+
 	onMount(async () => {
         if (!data.session) {
             goto('/auth');
         }
         // should only ever return one (the current user's profile)
-        const { data: result } = await supabase.from('profiles').select('*').limit(1);
-        if (result && result.length > 0) {
-            userData = result[0];
+        const { data: result } = await supabase.from('profiles').select('*').eq('id', data.session?.user.id).limit(1).single();
+        if (result) {
+            userData = result;
             displayName = userData.display_name;
             _displayName = displayName;
         }
@@ -77,6 +82,7 @@
             <input id="password" name="password" bind:value="{password}" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="new password" />
         </div>
         <button class="w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Save Changes</button>
+        <button on:click="{handleSignOut}" class="w-full mt-4 p-3 bg-red-500 text-white rounded-lg hover:bg-red-600">Sign out</button>
     </form>
 </div>
 {/if}

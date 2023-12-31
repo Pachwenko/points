@@ -6,7 +6,6 @@
      * Made by Patrick aka Pachwenko
      * https://github.com/Pachwenko
      */
-
     import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
     import { currentUserProfile, currentUserSessions } from '$lib/store.js';
@@ -16,22 +15,34 @@
     $: ({ supabase } = data)
 
     async function startPointingSession() {
-        const {data2, error} = await supabase.from('PointingSession').insert({
+        const userId = data.session.user.id; // syntax bug? refactor me
+        supabase.from('PointingSession').insert({
             last_updated: new Date().toISOString(),
-            player_data: {},
-            users: data?.session.user.id
-        }).select();
-        console.log('started new session', data2, error);
-        if (data2) {
-            goto(`/points/${error[0].id}`);
-        }
+            game_state: {
+                version: 1,
+                activePlayers: {
+                    userId: {
+                        id: data.session.user.id,
+                        displayName: $currentUserProfile.display_name,
+                        currentVote: '',
+                    },
+                },
+            },
+            users: [data.session.user.id],
+        }).select().single().then((newSession) => {
+            console.log('started new session', newSession);
+            if (newSession.data) {
+                goto(`/points/${newSession.data.id}`);
+            }
+        });
     }
 
     async function loadData() {
-        supabase.from('PointingSession').select().then((sessions) => {
+        supabase.from('PointingSession').select().contains('users', [data.session?.user.id]).then((sessions) => {
+        // supabase.from('PointingSession').select().then((sessions) => {
             currentUserSessions.set(sessions.data);
         });
-        supabase.from('profiles').select('*').limit(1).single().then((profile) => {
+        supabase.from('profiles').select('*').eq('id', data.session?.user.id).limit(1).single().then((profile) => {
             console.log('profile', profile);
             if (profile?.data) {
                 currentUserProfile.set(profile.data);

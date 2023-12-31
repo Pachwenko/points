@@ -1,6 +1,8 @@
 <!-- // src/routes/auth/+page.svelte -->
 <script>
   import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
+  import { page } from '$app/stores';
 
   export let data
   let { supabase } = data
@@ -8,6 +10,8 @@
 
   let email = ''
   let password = ''
+
+  let nextUrl = '';
 
   // const handleResetPassword = async () => {
   //   await supabase.auth.resetPasswordForEmail(email, {
@@ -20,9 +24,15 @@
       email,
       password,
       options: {
-        emailRedirectTo: `${location.origin}/`,
+        emailRedirectTo: nextUrl ? nextUrl: location.origin,
       },
     })
+    if (nextUrl) {
+      goto(nextUrl);
+    }
+    else {
+      goto(`${location.origin}/`); // go back to home back instead
+    }
   }
 
   const handleSignIn = async () => {
@@ -30,12 +40,21 @@
       email,
       password,
     })
-    goto(`${location.origin}/`);
+    if (nextUrl) {
+      goto(nextUrl);
+    }
+    else {
+      goto(`${location.origin}/`); // go back to home back instead
+    }
   }
 
   // const handleSignOut = async () => {
   //   await supabase.auth.signOut()
   // } // TODO: put sign out somewhere else? profile?
+
+  onMount(() => {
+    nextUrl = $page.url.searchParams.get('next');
+  })
 </script>
 
 <div class="flex flex-grow min-h-full justify-center items-center bg-gray-900">

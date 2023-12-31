@@ -9,6 +9,7 @@
     $: ({ supabase, session } = data)
 
     onMount(() => {
+        // This layout is shared between all pages
         const {
         data: { subscription },
         } = supabase.auth.onAuthStateChange((event, _session) => {

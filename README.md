@@ -1,18 +1,9 @@
-# create-svelte
+# [Svelte](https://svelte.dev/)
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+I'm using [svelte](https://svelte.dev/) here because it's really simple to use, for the most part it's just html and javascript.
 
-## Creating a project
+This project uses Node version 20.
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
 
 ## Developing
 
@@ -20,30 +11,85 @@ Once you've created a project and installed dependencies with `npm install` (or 
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+You can preview the production build with `npm run preview`. You should do this before deploying to make sure everything looks right!
 
 
 # [Supabase](https://supabase.com/)
 
-We make heavy use of supabase, for auth, db, realtime events, and more.
+We make heavy use of [supabase](https://supabase.com/), for auth, db, realtime events, and more.
 
 Client documentaton https://supabase.com/docs/reference/javascript/
 Auth documentation https://supabase.com/docs/guides/auth/auth-helpers/sveltekit
 
+#### Database
+
+We use the Supabase REST API to interact with postgres. See table definitions below:
+
+```sql
+create table
+  public."PointingSession" (
+    id uuid not null default gen_random_uuid (),
+    created_at timestamp with time zone not null default now(),
+    game_state jsonb null,
+    last_updated timestamp without time zone null default now(),
+    pointing_sessions bigint not null default '0'::bigint,
+    users uuid[] null,
+    constraint session_pkey primary key (id)
+  ) tablespace pg_default;
+
+
+create table
+  public.profiles (
+    id uuid not null,
+    display_name text null,
+    constraint profiles_pkey primary key (id),
+    constraint profiles_id_fkey foreign key (id) references auth.users (id) on delete cascade
+  ) tablespace pg_default;
+```
+
+These are the [RLS policies](https://supabase.com/docs/guides/auth/row-level-security) that allow us to query for data with pre-defined filter policies.
+
+```sql
+ALTER TABLE "public"."PointingSession" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."profiles" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow authenticated users access to INSERT" ON "public"."PointingSession"
+    AS PERMISSIVE FOR INSERT
+    TO authenticated
+    WITH CHECK (true);
+
+CREATE POLICY "Allow authenticated users access to SELECT" ON "public"."PointingSession"
+    AS PERMISSIVE FOR SELECT
+    TO authenticated
+    USING (true);
+
+CREATE POLICY "Allow authenticated users access to UPDATE" ON "public"."PointingSession"
+    AS PERMISSIVE FOR UPDATE
+    TO authenticated
+    USING (true);
+
+CREATE POLICY "Authenticated can DELETE based on m2m" ON "public"."PointingSession"
+    AS PERMISSIVE FOR DELETE
+    TO authenticated
+    USING (auth.uid() = ANY(users));
+
+CREATE POLICY "Everyone can see everyones profile" ON "public"."profiles"
+    AS PERMISSIVE FOR SELECT
+    TO authenticated, anon
+    USING ( true );
+
+CREATE POLICY "Users can create their own profile" ON "public"."profiles"
+    AS PERMISSIVE FOR INSERT
+    WITH CHECK ( auth.uid() = id );
+
+CREATE POLICY "Users can update their own profile" ON "public"."profiles"
+    AS PERMISSIVE FOR UPDATE
+    USING ( auth.uid() = id );
+```
+
 
 # [Tailwind](https://tailwindcss.com/)
+
+Tailwind is pretty great https://tailwindcss.com/
