@@ -160,11 +160,11 @@ var init_ssr = __esm({
 });
 
 // .svelte-kit/output/server/chunks/public.js
-var PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL;
+var PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY;
 var init_public = __esm({
   ".svelte-kit/output/server/chunks/public.js"() {
-    PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90bnJqc3VpcHJqcGJqdndzeXJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDI1OTkzODcsImV4cCI6MjAxODE3NTM4N30.RZp9Y6FAhq9M2QK7AAq0eLsq-9QZ0kUZIKfS0Q8M-MM";
     PUBLIC_SUPABASE_URL = "https://otnrjsuiprjpbjvwsyrv.supabase.co";
+    PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90bnJqc3VpcHJqcGJqdndzeXJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDI1OTkzODcsImV4cCI6MjAxODE3NTM4N30.RZp9Y6FAhq9M2QK7AAq0eLsq-9QZ0kUZIKfS0Q8M-MM";
   }
 });
 
@@ -8610,8 +8610,8 @@ var init__ = __esm({
     component = async () => component_cache ??= (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default;
     universal_id = "src/routes/+layout.js";
     server_id = "src/routes/+layout.server.js";
-    imports = ["_app/immutable/nodes/0.VVWWS14v.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.r8EpClek.js", "_app/immutable/chunks/navigation.QPO9O_54.js", "_app/immutable/chunks/singletons.CUugHnJX.js"];
-    stylesheets = ["_app/immutable/assets/0.fBOqixkb.css"];
+    imports = ["_app/immutable/nodes/0.kL6jkwyg.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.BDY4RwZ-.js", "_app/immutable/chunks/singletons.3FcDnPyn.js"];
+    stylesheets = ["_app/immutable/assets/0.ouh78p6i.css"];
     fonts = [];
   }
 });
@@ -8669,7 +8669,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ??= (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    imports2 = ["_app/immutable/nodes/1.OTXu1o7Y.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.r8EpClek.js", "_app/immutable/chunks/singletons.CUugHnJX.js"];
+    imports2 = ["_app/immutable/nodes/1.kyEyqAgO.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/singletons.3FcDnPyn.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -8707,7 +8707,7 @@ var init_page_svelte = __esm({
         supabase.from("PointingSession").select().then((sessions) => {
           currentUserSessions.set(sessions.data);
         });
-        supabase.from("profiles").select("*").limit(1).single().then((profile) => {
+        supabase.from("profiles").select("*").eq("id", data.session?.user.id).limit(1).single().then((profile) => {
           console.log("profile", profile);
           if (profile?.data) {
             currentUserProfile.set(profile.data);
@@ -8748,7 +8748,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ??= (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    imports3 = ["_app/immutable/nodes/2.F7tspOP1.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.r8EpClek.js", "_app/immutable/chunks/navigation.QPO9O_54.js", "_app/immutable/chunks/singletons.CUugHnJX.js", "_app/immutable/chunks/store.GyNWBc1a.js"];
+    imports3 = ["_app/immutable/nodes/2.BZQyq0SK.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/store.8eY6meUO.js", "_app/immutable/chunks/singletons.3FcDnPyn.js", "_app/immutable/chunks/navigation.BDY4RwZ-.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -8788,7 +8788,7 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ??= (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default;
-    imports4 = ["_app/immutable/nodes/3.OPa2zm_3.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.r8EpClek.js", "_app/immutable/chunks/navigation.QPO9O_54.js", "_app/immutable/chunks/singletons.CUugHnJX.js"];
+    imports4 = ["_app/immutable/nodes/3.22xvnUrQ.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.BDY4RwZ-.js", "_app/immutable/chunks/singletons.3FcDnPyn.js"];
     stylesheets4 = [];
     fonts4 = [];
   }
@@ -8817,6 +8817,9 @@ var page_svelte_exports3 = {};
 __export(page_svelte_exports3, {
   default: () => Page3
 });
+function currentTimestamp() {
+  return (/* @__PURE__ */ new Date()).toISOString();
+}
 var Page3;
 var init_page_svelte3 = __esm({
   ".svelte-kit/output/server/entries/pages/points/_slug_/_page.svelte.js"() {
@@ -8828,14 +8831,32 @@ var init_page_svelte3 = __esm({
       $$unsubscribe_currentPointingSession = subscribe(currentPointingSession, (value) => $currentPointingSession = value);
       $$unsubscribe_currentUserProfile = subscribe(currentUserProfile, (value) => $currentUserProfile = value);
       let { data } = $$props;
-      let { supabase } = data;
-      async function loadData() {
-        supabase.from("PointingSession").select("*").eq("id", data.slug).single().then((session) => {
-          console.log("Got pointing session", session);
-          if (session.data) {
-            currentPointingSession.set(session.data);
+      let { supabase, session } = data;
+      let realtimeChannel;
+      let possibleNumbers = [];
+      const numberSelections = ["Fibonacci"];
+      let _numberSelection = numberSelections[0];
+      async function syncPointingSession(session2) {
+        console.debug("rtu session", session2);
+        currentPointingSession.set(session2.new);
+      }
+      async function syncGameState() {
+        console.log("syncing game state", $currentPointingSession);
+        supabase.from("PointingSession").update({
+          users: $currentPointingSession.users,
+          game_state: $currentPointingSession.game_state,
+          last_updated: currentTimestamp()
+        }).eq("id", $currentPointingSession.id).select().single().then((updatedSession) => {
+          if (updatedSession.data) {
+            currentPointingSession.set(updatedSession.data);
+            console.log("updated game state", updatedSession);
+          }
+          if (updatedSession.error) {
+            console.error("error updating game state", updatedSession.error);
           }
         });
+      }
+      async function loadData() {
         supabase.from("profiles").select("*").limit(1).single().then((profile) => {
           console.log("profile", profile);
           if (profile?.data) {
@@ -8844,18 +8865,65 @@ var init_page_svelte3 = __esm({
             currentUserProfile.set({ display_name: "default", temporary: true });
           }
         });
+        supabase.from("PointingSession").select("*").eq("id", data.slug).single().then((pointingSession) => {
+          console.log("Got pointing session", pointingSession, currentPointingSession);
+          if (pointingSession.data) {
+            pointingSession.data.game_state.activePlayers[session.user.id] = {
+              id: session.user.id,
+              displayName: $currentUserProfile.display_name,
+              currentVote: ""
+            };
+            currentPointingSession.set(pointingSession.data);
+            syncGameState();
+            realtimeChannel = supabase.channel(`${data.slug}-${session.user.id}`).on(
+              "postgres_changes",
+              {
+                event: "UPDATE",
+                schema: "public",
+                table: "PointingSession",
+                filter: `id=eq.${pointingSession.data.id}`
+              },
+              (payload) => syncPointingSession(payload)
+            ).subscribe();
+            console.log("subscribing to reatltime updates", pointingSession.data.id, realtimeChannel);
+          }
+        });
       }
+      let activePlayers = [];
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
-      ({ supabase } = data);
+      ({ supabase, session } = data);
       {
-        if (data.session) {
+        if (session) {
           loadData();
+        }
+      }
+      {
+        if ($currentPointingSession && $currentPointingSession?.game_state?.activePlayers) {
+          activePlayers = Object.values($currentPointingSession.game_state.activePlayers);
+        }
+      }
+      {
+        if (_numberSelection) {
+          const numbersData = {
+            "Fibonacci": {
+              name: "Fibonacci",
+              numbers: [1, 2, 3, 5, 8]
+            }
+          };
+          possibleNumbers = numbersData[_numberSelection].numbers;
         }
       }
       $$unsubscribe_currentPointingSession();
       $$unsubscribe_currentUserProfile();
-      return ` <div class="bg-gray-900 text-white p-8 min-h-screen flex flex-col justify-center items-center">${$currentPointingSession && $currentUserProfile ? `<div class="grid grid-cols-3"><div><h1 class="text-3xl font-bold p-3">Pointing Session ${escape(data.slug)}<h1><h3 class="font-bold text-xl" data-svelte-h="svelte-ph10ye">Players</h3> <ol><li>${escape($currentUserProfile.display_name)}</li> ${escape($currentPointingSession.users)}</ol></h1></h1></div> <div data-svelte-h="svelte-olyag"></div> <div data-svelte-h="svelte-pyc1uw"></div></div>` : ``}</div>`;
+      return ` <div class="bg-gray-900 text-white p-8 min-h-screen flex flex-col justify-center items-center">${$currentPointingSession ? `<div class="grid grid-cols-3"><div><h1 class="text-3xl font-bold p-3"><h1><h3 class="font-bold text-xl" data-svelte-h="svelte-ph10ye">Players</h3> <ol>${each(activePlayers, (player) => {
+        return `${player.id === session.user.id ? `<li class="text-sm font-bold">${escape(player.displayName)}: ${escape(player.currentVote)}</li>` : `<li class="text-sm">${escape(player.displayName)}: ${escape(player.currentVote)}</li>`}`;
+      })}</ol></h1></h1></div> <div>Select your pointing system:
+                <ul>${each(numberSelections, (selection) => {
+        return `<li><button class="border border-1 border-round bg-gray-700 hoder:bg-gray-600 m-1 p-2"${add_attribute("aria-current", _numberSelection === selection, 0)}${add_attribute("aria-label", selection, 0)}>${escape(selection)}</button> </li>`;
+      })}</ul> ${each(possibleNumbers, (number) => {
+        return `<button class="border border-1 m-1 p-1"${add_attribute("aria-current", _numberSelection === number, 0)}${add_attribute("aria-label", number, 0)}>${escape(number)}</button>`;
+      })}</div> <div></div></div>` : ``}</div>`;
     });
   }
 });
@@ -8878,7 +8946,7 @@ var init__5 = __esm({
     index5 = 4;
     component5 = async () => component_cache5 ??= (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default;
     universal_id2 = "src/routes/points/[slug]/+page.js";
-    imports5 = ["_app/immutable/nodes/4.08-mPXIl.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.r8EpClek.js", "_app/immutable/chunks/navigation.QPO9O_54.js", "_app/immutable/chunks/singletons.CUugHnJX.js", "_app/immutable/chunks/store.GyNWBc1a.js"];
+    imports5 = ["_app/immutable/nodes/4._R08mldT.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/store.8eY6meUO.js", "_app/immutable/chunks/singletons.3FcDnPyn.js", "_app/immutable/chunks/navigation.BDY4RwZ-.js"];
     stylesheets5 = [];
     fonts5 = [];
   }
@@ -8919,7 +8987,7 @@ var init__6 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     index6 = 5;
     component6 = async () => component_cache6 ??= (await Promise.resolve().then(() => (init_page_svelte4(), page_svelte_exports4))).default;
-    imports6 = ["_app/immutable/nodes/5.yOy183OG.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.r8EpClek.js", "_app/immutable/chunks/navigation.QPO9O_54.js", "_app/immutable/chunks/singletons.CUugHnJX.js"];
+    imports6 = ["_app/immutable/nodes/5.BSao_MyU.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.BDY4RwZ-.js", "_app/immutable/chunks/singletons.3FcDnPyn.js"];
     stylesheets6 = [];
     fonts6 = [];
   }
@@ -9129,7 +9197,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1hfw9jo"
+  version_hash: "osaprm"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -12518,7 +12586,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set(["favicon.png"]),
     mimeTypes: { ".png": "image/png" },
     _: {
-      client: { "start": "_app/immutable/entry/start.gCnI_7ud.js", "app": "_app/immutable/entry/app.aiXVGdu4.js", "imports": ["_app/immutable/entry/start.gCnI_7ud.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/singletons.CUugHnJX.js", "_app/immutable/entry/app.aiXVGdu4.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.k-kUyWhY.js", "_app/immutable/chunks/index.r8EpClek.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
+      client: { "start": "_app/immutable/entry/start.XGsC_k3V.js", "app": "_app/immutable/entry/app.n7aodMf2.js", "imports": ["_app/immutable/entry/start.XGsC_k3V.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/singletons.3FcDnPyn.js", "_app/immutable/entry/app.n7aodMf2.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
