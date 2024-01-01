@@ -8583,7 +8583,7 @@ var init_layout_svelte = __esm({
       let { data } = $$props;
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
-      return `<body class="flex flex-col h-screen"><header class="bg-gray-800 text-white p-4"><div class="flex justify-between items-center"><div data-svelte-h="svelte-181dm0p"><a href="/" class="text-xl hover:text-gray-300">Home</a></div> <div>${data.session ? `<a href="/profile" class="text-xl hover:text-gray-300" data-svelte-h="svelte-sig8lp">Profile</a>` : `<a href="/auth" class="text-xl hover:text-gray-300" data-svelte-h="svelte-1okb2sv">Sign In</a>`}</div></div></header> <main class="flex-grow bg-gray-800 w-full">${slots.default ? slots.default({}) : ``}</main> <footer class="bg-gray-800 text-white p-4 fixed bottom-0 inset-x-0" data-svelte-h="svelte-1y9mf9a"><div class="flex justify-center"><a target="_blank" href="https://github.com/Pachwenko/points" class="text-xl hover:text-gray-300">Source</a></div></footer></body>`;
+      return `<body class="flex flex-col h-screen"><header class="bg-gray-800 text-white p-4"><div class="flex justify-between items-center"><div data-svelte-h="svelte-jah4ha"><a href="/" class="text-xl hover:text-gray-300">Home</a></div> <div>${data.session ? `<a href="/profile" class="text-xl hover:text-gray-300" data-svelte-h="svelte-sig8lp">Profile</a>` : `<a href="/auth" class="text-xl hover:text-gray-300" data-svelte-h="svelte-1okb2sv">Sign In</a>`}</div></div></header> <main class="flex-grow bg-gray-800 w-full">${slots.default ? slots.default({}) : ``}</main> <footer class="bg-gray-800 text-white p-4 fixed bottom-0 inset-x-0" data-svelte-h="svelte-4owajf"><div class="flex justify-center"><a target="_blank" href="https://github.com/Pachwenko/points" class="text-xl hover:text-gray-300">Source</a></div></footer></body>`;
     });
   }
 });
@@ -8610,7 +8610,7 @@ var init__ = __esm({
     component = async () => component_cache ??= (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default;
     universal_id = "src/routes/+layout.js";
     server_id = "src/routes/+layout.server.js";
-    imports = ["_app/immutable/nodes/0._MPZwjC3.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.3zXXK8Cs.js", "_app/immutable/chunks/singletons.U4N2VXUj.js"];
+    imports = ["_app/immutable/nodes/0.fsytAxSU.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.HTgVpVhm.js", "_app/immutable/chunks/singletons.W-0CdNg9.js"];
     stylesheets = ["_app/immutable/assets/0.4ANkV7Fm.css"];
     fonts = [];
   }
@@ -8678,7 +8678,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ??= (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    imports2 = ["_app/immutable/nodes/1.49wCRyYh.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/stores.g64q4ZFt.js", "_app/immutable/chunks/singletons.U4N2VXUj.js"];
+    imports2 = ["_app/immutable/nodes/1._3oURr4z.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/stores.ZVuGaJ9t.js", "_app/immutable/chunks/singletons.W-0CdNg9.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -8735,8 +8735,8 @@ var init_page_svelte = __esm({
       }
       $$unsubscribe_currentUserProfile();
       $$unsubscribe_currentUserSessions();
-      return `${data.session ? `<div class="bg-gray-900 text-white p-8 min-h-full flex flex-col flex-grow justify-center items-center"><div class="container mx-auto border border-1 p-2"><h1 class="text-3xl font-bold" data-svelte-h="svelte-gcb7u4">Welcome to Spring Pointing!</h1> ${$currentUserProfile ? `<p>Current display name: ${escape($currentUserProfile.display_name)}</p>` : `<p data-svelte-h="svelte-u9upty">Current display name: loading...</p>`} <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-svelte-h="svelte-k8on3b">Start new Pointing Session</button> ${$currentUserSessions ? `<div>Previous Sessions:
-                <ul>${each($currentUserSessions, (session) => {
+      return `${data.session ? `<div class="bg-gray-900 text-white p-8 min-h-full flex flex-col flex-grow justify-center items-center"><div class="container mx-auto border border-1 p-2"><h1 class="text-3xl font-bold" data-svelte-h="svelte-gcb7u4">Welcome to Spring Pointing!</h1> ${$currentUserProfile ? `<p>Current display name: ${escape($currentUserProfile.display_name)}</p>` : `<p data-svelte-h="svelte-u9upty">Current display name: loading...</p>`} <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-svelte-h="svelte-1oq9o6h">Start new Pointing Session</button> ${$currentUserSessions ? `<div>Previous Sessions:
+					<ul>${each($currentUserSessions, (session) => {
         return `<li><a href="${"/points/" + escape(session.id, true) + "/"}">${escape(session.id)} - ${escape(session.last_updated)}</a> </li>`;
       })}</ul></div>` : ``}</div></div>` : ``}`;
     });
@@ -8757,7 +8757,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ??= (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    imports3 = ["_app/immutable/nodes/2.sxs7klCF.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/store.GR-__OLj.js", "_app/immutable/chunks/singletons.U4N2VXUj.js", "_app/immutable/chunks/navigation.3zXXK8Cs.js"];
+    imports3 = ["_app/immutable/nodes/2.rKK9qUBW.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/store.hw7zZTON.js", "_app/immutable/chunks/singletons.W-0CdNg9.js", "_app/immutable/chunks/navigation.HTgVpVhm.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -8782,7 +8782,7 @@ var init_page_svelte2 = __esm({
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
       $$unsubscribe_page();
-      return `  <div class="flex flex-grow min-h-full justify-center items-center bg-gray-900"><form class="container mx-auto bg-gray-800 p-6 rounded-lg w-full max-w-md"><p class="text-2xl text-gray-300" data-svelte-h="svelte-gyalbk">Welcome! This site is completely free to use, but you must sign up first!</p> <div class="mb-4"><label for="email" class="block text-gray-300 mb-2" data-svelte-h="svelte-3a67ff">Email</label> <input id="email" name="email" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Email"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block text-gray-300 mb-2" data-svelte-h="svelte-11ilyyv">Password</label> <input id="password" type="password" name="password" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password"${add_attribute("value", password, 0)}></div> <div class="mb-4 flex justify-between">  <button class="w-1/3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" data-svelte-h="svelte-1nj8h5k">Sign up</button> <button class="w-1/3 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600" data-svelte-h="svelte-1qhsj3y">Sign in</button></div></form></div>`;
+      return `  <div class="flex flex-grow min-h-full justify-center items-center bg-gray-900"><form class="container mx-auto bg-gray-800 p-6 rounded-lg w-full max-w-md"><p class="text-2xl text-gray-300" data-svelte-h="svelte-16860oz">Welcome! This site is completely free to use, but you must sign up first!</p> <div class="mb-4"><label for="email" class="block text-gray-300 mb-2" data-svelte-h="svelte-3a67ff">Email</label> <input id="email" name="email" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Email"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block text-gray-300 mb-2" data-svelte-h="svelte-11ilyyv">Password</label> <input id="password" type="password" name="password" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password"${add_attribute("value", password, 0)}></div> <div class="mb-4 flex justify-between">  <button class="w-1/3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" data-svelte-h="svelte-1iwbal5">Sign up</button> <button class="w-1/3 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600" data-svelte-h="svelte-u70yfr">Sign in</button></div></form></div>`;
     });
   }
 });
@@ -8801,7 +8801,7 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ??= (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default;
-    imports4 = ["_app/immutable/nodes/3.pgotYUkF.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.3zXXK8Cs.js", "_app/immutable/chunks/singletons.U4N2VXUj.js", "_app/immutable/chunks/stores.g64q4ZFt.js"];
+    imports4 = ["_app/immutable/nodes/3.4xT4gQF0.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.HTgVpVhm.js", "_app/immutable/chunks/singletons.W-0CdNg9.js", "_app/immutable/chunks/stores.ZVuGaJ9t.js"];
     stylesheets4 = [];
     fonts4 = [];
   }
@@ -8855,7 +8855,7 @@ var init_page_svelte3 = __esm({
       }
       async function syncGameState() {
         console.log("syncing game state", $currentPointingSession);
-        supabase.from("PointingSession").update({
+        await supabase.from("PointingSession").update({
           users: $currentPointingSession.users,
           game_state: $currentPointingSession.game_state,
           last_updated: currentTimestamp()
@@ -8870,7 +8870,7 @@ var init_page_svelte3 = __esm({
         });
       }
       async function loadData() {
-        supabase.from("profiles").select("*").eq("id", session.user.id).limit(1).single().then((profile) => {
+        await supabase.from("profiles").select("*").eq("id", session.user.id).limit(1).single().then((profile) => {
           console.log("profile", profile);
           if (profile?.data) {
             currentUserProfile.set(profile.data);
@@ -8878,16 +8878,9 @@ var init_page_svelte3 = __esm({
             currentUserProfile.set({ display_name: "default", temporary: true });
           }
         });
-        supabase.from("PointingSession").select("*").eq("id", data.slug).single().then((pointingSession) => {
+        await supabase.from("PointingSession").select("*").eq("id", data.slug).single().then((pointingSession) => {
           console.log("Got pointing session", pointingSession, currentPointingSession);
           if (pointingSession.data) {
-            pointingSession.data.game_state.activePlayers[session.user.id] = {
-              id: session.user.id,
-              displayName: $currentUserProfile.display_name,
-              currentVote: ""
-            };
-            currentPointingSession.set(pointingSession.data);
-            syncGameState();
             realtimeChannel = supabase.channel(`${data.slug}-${session.user.id}`).on(
               "postgres_changes",
               {
@@ -8899,6 +8892,14 @@ var init_page_svelte3 = __esm({
               (payload) => syncPointingSession(payload)
             ).subscribe();
             console.log("subscribing to reatltime updates", pointingSession.data.id, realtimeChannel);
+            console.log("adding player to session", session.user.id);
+            pointingSession.data.game_state.activePlayers[session.user.id] = {
+              id: session.user.id,
+              displayName: $currentUserProfile.display_name,
+              currentVote: ""
+            };
+            currentPointingSession.set(pointingSession.data);
+            syncGameState();
           }
         });
       }
@@ -8919,7 +8920,7 @@ var init_page_svelte3 = __esm({
       {
         if (_numberSelection) {
           const numbersData = {
-            "Fibonacci": {
+            Fibonacci: {
               name: "Fibonacci",
               numbers: [1, 2, 3, 5, 8]
             }
@@ -8932,7 +8933,7 @@ var init_page_svelte3 = __esm({
       return ` <div class="bg-gray-900 text-white p-8 min-h-screen flex flex-col justify-center items-center">${$currentPointingSession && session ? `<div class="grid grid-cols-3"><div><h1 class="text-3xl font-bold p-3"><h1><h3 class="font-bold text-2xl mb-2" data-svelte-h="svelte-1vfpxjc">Player Votes</h3> <ol>${each(activePlayers, (player) => {
         return `${player.id === session.user.id ? `<li class="text-lg font-bold">${escape(player.displayName)}: ${escape(player.currentVote)}</li>` : `<li class="text-lg">${escape(player.displayName)}: ${escape(player.currentVote)}</li>`}`;
       })}</ol></h1></h1></div> <div>Select your pointing system:
-                <ul>${each(numberSelections, (selection) => {
+				<ul>${each(numberSelections, (selection) => {
         return `<li><button class="border border-1 border-round bg-gray-700 hoder:bg-gray-600 m-1 p-2"${add_attribute("aria-current", _numberSelection === selection, 0)}${add_attribute("aria-label", selection, 0)}>${escape(selection)}</button> </li>`;
       })}</ul> ${each(possibleNumbers, (number) => {
         return `<button class="border border-1 m-1 p-1"${add_attribute("aria-current", _numberSelection === number, 0)}${add_attribute("aria-label", number, 0)}>${escape(number)}</button>`;
@@ -8959,7 +8960,7 @@ var init__5 = __esm({
     index5 = 4;
     component5 = async () => component_cache5 ??= (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default;
     universal_id2 = "src/routes/points/[slug]/+page.js";
-    imports5 = ["_app/immutable/nodes/4.FMnM5QDE.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/store.GR-__OLj.js", "_app/immutable/chunks/singletons.U4N2VXUj.js", "_app/immutable/chunks/navigation.3zXXK8Cs.js"];
+    imports5 = ["_app/immutable/nodes/4.Pdg1-uRN.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/store.hw7zZTON.js", "_app/immutable/chunks/singletons.W-0CdNg9.js", "_app/immutable/chunks/navigation.HTgVpVhm.js"];
     stylesheets5 = [];
     fonts5 = [];
   }
@@ -8981,7 +8982,7 @@ var init_page_svelte4 = __esm({
       let password = "";
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
-      return `${data.session ? `<div class="min-h-screen flex justify-center items-center bg-gray-900"><form class="bg-gray-800 p-6 rounded-lg w-full max-w-md">${``} <div class="mb-4"><label for="display-name" class="block text-gray-300 mb-2" data-svelte-h="svelte-1l1bv0c">Display Name</label> <input id="display-name" name="display_name" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Display Name"${add_attribute("value", displayName, 0)}></div> <div class="mb-4"><label for="email" class="block text-gray-300 mb-2" data-svelte-h="svelte-3a67ff">Email</label> <input id="email" name="email" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="me@example.com"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block text-gray-300 mb-2" data-svelte-h="svelte-hwxk3l">New Password</label> <input id="password" name="password" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="new password"${add_attribute("value", password, 0)}></div> <button class="w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600" data-svelte-h="svelte-g3kh9p">Save Changes</button> <button class="w-full mt-4 p-3 bg-red-500 text-white rounded-lg hover:bg-red-600" data-svelte-h="svelte-12o0761">Sign out</button></form></div>` : ``}`;
+      return `${data.session ? `<div class="min-h-screen flex justify-center items-center bg-gray-900"><form class="bg-gray-800 p-6 rounded-lg w-full max-w-md">${``} <div class="mb-4"><label for="display-name" class="block text-gray-300 mb-2" data-svelte-h="svelte-1l1bv0c">Display Name</label> <input id="display-name" name="display_name" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Display Name"${add_attribute("value", displayName, 0)}></div> <div class="mb-4"><label for="email" class="block text-gray-300 mb-2" data-svelte-h="svelte-3a67ff">Email</label> <input id="email" name="email" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="me@example.com"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block text-gray-300 mb-2" data-svelte-h="svelte-hwxk3l">New Password</label> <input id="password" name="password" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="new password"${add_attribute("value", password, 0)}></div> <button class="w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600" data-svelte-h="svelte-1m4tkw0">Save Changes</button> <button class="w-full mt-4 p-3 bg-red-500 text-white rounded-lg hover:bg-red-600" data-svelte-h="svelte-1k2o8tq">Sign out</button></form></div>` : ``}`;
     });
   }
 });
@@ -9000,7 +9001,7 @@ var init__6 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     index6 = 5;
     component6 = async () => component_cache6 ??= (await Promise.resolve().then(() => (init_page_svelte4(), page_svelte_exports4))).default;
-    imports6 = ["_app/immutable/nodes/5.TdGm7wV-.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.3zXXK8Cs.js", "_app/immutable/chunks/singletons.U4N2VXUj.js"];
+    imports6 = ["_app/immutable/nodes/5.wRoI2--l.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.HTgVpVhm.js", "_app/immutable/chunks/singletons.W-0CdNg9.js"];
     stylesheets6 = [];
     fonts6 = [];
   }
@@ -9210,7 +9211,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "17oohb0"
+  version_hash: "40yrxw"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -12599,7 +12600,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set(["favicon.png"]),
     mimeTypes: { ".png": "image/png" },
     _: {
-      client: { "start": "_app/immutable/entry/start.PKjfFvZU.js", "app": "_app/immutable/entry/app.Y8hEajEG.js", "imports": ["_app/immutable/entry/start.PKjfFvZU.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/singletons.U4N2VXUj.js", "_app/immutable/entry/app.Y8hEajEG.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
+      client: { "start": "_app/immutable/entry/start.z22N9R2g.js", "app": "_app/immutable/entry/app.Js9w7WEb.js", "imports": ["_app/immutable/entry/start.z22N9R2g.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/singletons.W-0CdNg9.js", "_app/immutable/entry/app.Js9w7WEb.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
