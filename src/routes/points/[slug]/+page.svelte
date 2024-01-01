@@ -48,7 +48,7 @@
 		$currentPointingSession.game_state.activePlayers[session.user.id].currentVote = number;
 		$currentPointingSession.game_state.last_updated = currentTimestamp();
 
-		syncGameState();
+		await syncGameState();
 	}
 
 	async function clearVotes() {
@@ -57,7 +57,7 @@
 
 	async function syncGameState() {
 		console.log('syncing game state', $currentPointingSession);
-		supabase
+		await supabase
 			.from('PointingSession')
 			.update({
 				users: $currentPointingSession.users,
@@ -93,7 +93,7 @@
 					currentUserProfile.set({ display_name: 'default', temporary: true });
 				}
 			});
-		supabase
+		await supabase
 			.from('PointingSession')
 			.select('*')
 			.eq('id', data.slug)
@@ -119,8 +119,6 @@
 					console.log('subscribing to reatltime updates', pointingSession.data.id, realtimeChannel);
 
 					// check if current user is tied to session, if not update the session to add user!
-					// console.log('1234', session.data.game_state);
-					// console.log('1234 5', $currentPointingSession.game_state);
 					console.log('adding player to session', session.user.id);
 					pointingSession.data.game_state.activePlayers[session.user.id] = {
 						id: session.user.id,
