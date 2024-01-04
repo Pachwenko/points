@@ -71,7 +71,7 @@
 
 {#if data.session}
 	<div class="h-full flex justify-center items-center">
-		<form on:submit={handleSaveChanges} class="bg-zinc-800 p-6 rounded-lg w-full max-w-md">
+		<form on:submit={handleSaveChanges} class="p-6 rounded-lg w-full max-w-md">
 			{#if message}
 				<p class=" text-2xl text-center border border-2">{message}</p>
 			{/if}

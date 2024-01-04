@@ -61,54 +61,54 @@
 
 </script>
 
-<div class="flex flex-grow min-h-full justify-center items-center bg-gray-900">
+<div class="flex flex-grow h-full justify-center items-center">
 	<form
 		on:submit={handleSignUp}
-		class="container mx-auto bg-gray-800 p-6 rounded-lg w-full max-w-md"
+		class="container mx-auto p-6 rounded-lg w-full max-w-md"
 	>
-		<p class="text-2xl text-gray-300">
+		<p class="text-2xl mb-5">
 			Welcome! This site is completely free to use, but you must sign up first!
 		</p>
 		<div class="mb-4">
-			<label for="display-name" class="block text-gray-300 mb-2">Username</label>
+			<label for="display-name" class="block  mb-2">Username</label>
 			<input
 				id="display-name"
 				name="display-name"
 				bind:value={displayName}
-				class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+				class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 				placeholder="Display name"
 			/>
 		</div>
 		<div class="mb-4">
-			<label for="email" class="block text-gray-300 mb-2">Email</label>
+			<label for="email" class="block  mb-2">Email</label>
 			<input
 				id="email"
 				name="email"
 				bind:value={email}
-				class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+				class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 				placeholder="Email"
 			/>
 		</div>
 		<div class="mb-4">
-			<label for="password" class="block text-gray-300 mb-2">Password</label>
+			<label for="password" class="block  mb-2">Password</label>
 			<input
 				id="password"
 				type="password"
 				name="password"
 				bind:value={password}
-				class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+				class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 				placeholder="Password"
 			/>
 		</div>
 		<div class="mb-4 flex justify-between">
 			<!-- <button on:click={handleResetPassword} class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Reset Password</button> -->
 			<!-- <button on:click="{handleSignOut}" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Sign out</button> -->
-			<button class="w-1/3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+			<button class="w-1/3 px-4 py-2 bg-aqua text-white rounded-lg hover:bg-dim-aqua"
 				>Sign up</button
 			>
 			<button
 				on:click={handleSignIn}
-				class="w-1/3 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+				class="w-1/3 px-4 py-2 bg-green text-white rounded-lg hover:bg-dim-green"
 				>Sign in</button
 			>
 		</div>
