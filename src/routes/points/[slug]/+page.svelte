@@ -37,8 +37,10 @@
 	async function syncPointingSession(session) {
 		// when debugging, check network log for the websocket!
 		// called for realtime updateds to our pointing session
-		console.debug('rtu session', session);
-		currentPointingSession.set(session.new); // can access old state with "old"
+		if (session.new.last_updated > $currentPointingSession.last_updated) {
+			console.debug('syncPointingSession', session);
+			currentPointingSession.set(session.new); // can access old state with "old"
+		}
 	}
 
 	async function vote(number) {
@@ -46,8 +48,8 @@
 		// TODO: also post other game state data here,
 		// like last_updated should be current time
 		$currentPointingSession.game_state.activePlayers[session.user.id].currentVote = number;
+		$currentPointingSession.game_state.activePlayers[session.user.id].displayName = $currentUserProfile.display_name;
 		$currentPointingSession.game_state.last_updated = currentTimestamp();
-
 		await syncGameState();
 	}
 
@@ -60,7 +62,7 @@
 		await supabase
 			.from('PointingSession')
 			.update({
-				users: $currentPointingSession.users,
+				// users: $currentPointingSession.users,
 				game_state: $currentPointingSession.game_state,
 				last_updated: currentTimestamp()
 			})
@@ -163,7 +165,6 @@
 	});
 </script>
 
-<!-- Your updated template with increased border size and full-screen layout -->
 <div class="bg-gray-900 text-white p-8 min-h-screen flex flex-col justify-center items-center">
 	{#if $currentPointingSession && session}
 		<div class="grid grid-cols-3">
@@ -174,7 +175,7 @@
 						<ol>
 							{#each activePlayers as player}
 								{#if player.id === session.user.id}
-									<li class="text-lg font-bold">{player.displayName}: {player.currentVote}</li>
+									<li class="text-lg font-bold text-yellow-200">{player.displayName}: {player.currentVote}</li>
 								{:else}
 									<li class="text-lg">{player.displayName}: {player.currentVote}</li>
 								{/if}

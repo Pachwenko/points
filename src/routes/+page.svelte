@@ -15,21 +15,20 @@
 	$: ({ supabase } = data);
 
 	async function startPointingSession() {
-		const userId = data.session.user.id; // syntax bug? refactor me
+		const game_state = {
+			version: 1,
+			activePlayers: {}
+		}
+		game_state[data.session.user.is] = { // weird bug, cant use a var for a key?
+			id: data.session.user.id,
+			displayName: $currentUserProfile.display_name,
+			currentVote: ''
+		}
 		supabase
 			.from('PointingSession')
 			.insert({
 				last_updated: new Date().toISOString(),
-				game_state: {
-					version: 1,
-					activePlayers: {
-						userId: {
-							id: data.session.user.id,
-							displayName: $currentUserProfile.display_name,
-							currentVote: ''
-						}
-					}
-				},
+				game_state: game_state,
 				users: [data.session.user.id]
 			})
 			.select()

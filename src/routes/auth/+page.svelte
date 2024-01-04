@@ -8,6 +8,7 @@
 	let { supabase } = data;
 	$: ({ supabase } = data);
 
+	let displayName = '';
 	let email = '';
 	let password = '';
 
@@ -26,6 +27,14 @@
 			options: {
 				emailRedirectTo: nextUrl ? nextUrl : location.origin
 			}
+		}).then(async (user) => {
+			console.log('created user', user);
+			await supabase
+				.from('profiles')
+				.insert({ id: user.data.user.id, display_name: displayName })
+				.then((profile) => {
+					console.log('created profile', profile);
+				});
 		});
 		if (nextUrl) {
 			goto(nextUrl);
@@ -46,13 +55,10 @@
 		}
 	};
 
-	// const handleSignOut = async () => {
-	//   await supabase.auth.signOut()
-	// } // TODO: put sign out somewhere else? profile?
-
 	onMount(() => {
 		nextUrl = $page.url.searchParams.get('next');
 	});
+
 </script>
 
 <div class="flex flex-grow min-h-full justify-center items-center bg-gray-900">
@@ -63,6 +69,16 @@
 		<p class="text-2xl text-gray-300">
 			Welcome! This site is completely free to use, but you must sign up first!
 		</p>
+		<div class="mb-4">
+			<label for="display-name" class="block text-gray-300 mb-2">Username</label>
+			<input
+				id="display-name"
+				name="display-name"
+				bind:value={displayName}
+				class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+				placeholder="Display name"
+			/>
+		</div>
 		<div class="mb-4">
 			<label for="email" class="block text-gray-300 mb-2">Email</label>
 			<input
