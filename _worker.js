@@ -8610,8 +8610,8 @@ var init__ = __esm({
     component = async () => component_cache ??= (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default;
     universal_id = "src/routes/+layout.js";
     server_id = "src/routes/+layout.server.js";
-    imports = ["_app/immutable/nodes/0.fsytAxSU.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.HTgVpVhm.js", "_app/immutable/chunks/singletons.W-0CdNg9.js"];
-    stylesheets = ["_app/immutable/assets/0.4ANkV7Fm.css"];
+    imports = ["_app/immutable/nodes/0.I3VhFfkM.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.s0Ho3WJw.js", "_app/immutable/chunks/singletons.jECpAEwk.js"];
+    stylesheets = ["_app/immutable/assets/0.6pwnYZmE.css"];
     fonts = [];
   }
 });
@@ -8678,7 +8678,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ??= (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    imports2 = ["_app/immutable/nodes/1._3oURr4z.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/stores.ZVuGaJ9t.js", "_app/immutable/chunks/singletons.W-0CdNg9.js"];
+    imports2 = ["_app/immutable/nodes/1.L3H2t0fT.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/stores.tn5W0n_r.js", "_app/immutable/chunks/singletons.jECpAEwk.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -8757,7 +8757,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ??= (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    imports3 = ["_app/immutable/nodes/2.rKK9qUBW.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/store.hw7zZTON.js", "_app/immutable/chunks/singletons.W-0CdNg9.js", "_app/immutable/chunks/navigation.HTgVpVhm.js"];
+    imports3 = ["_app/immutable/nodes/2.sg954JgI.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/store._jQ-yhp_.js", "_app/immutable/chunks/singletons.jECpAEwk.js", "_app/immutable/chunks/navigation.s0Ho3WJw.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -8777,12 +8777,13 @@ var init_page_svelte2 = __esm({
       let $$unsubscribe_page;
       $$unsubscribe_page = subscribe(page, (value) => value);
       let { data } = $$props;
+      let displayName = "";
       let email = "";
       let password = "";
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
       $$unsubscribe_page();
-      return `  <div class="flex flex-grow min-h-full justify-center items-center bg-gray-900"><form class="container mx-auto bg-gray-800 p-6 rounded-lg w-full max-w-md"><p class="text-2xl text-gray-300" data-svelte-h="svelte-16860oz">Welcome! This site is completely free to use, but you must sign up first!</p> <div class="mb-4"><label for="email" class="block text-gray-300 mb-2" data-svelte-h="svelte-3a67ff">Email</label> <input id="email" name="email" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Email"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block text-gray-300 mb-2" data-svelte-h="svelte-11ilyyv">Password</label> <input id="password" type="password" name="password" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password"${add_attribute("value", password, 0)}></div> <div class="mb-4 flex justify-between">  <button class="w-1/3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" data-svelte-h="svelte-1iwbal5">Sign up</button> <button class="w-1/3 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600" data-svelte-h="svelte-u70yfr">Sign in</button></div></form></div>`;
+      return `  <div class="flex flex-grow min-h-full justify-center items-center bg-gray-900"><form class="container mx-auto bg-gray-800 p-6 rounded-lg w-full max-w-md"><p class="text-2xl text-gray-300" data-svelte-h="svelte-16860oz">Welcome! This site is completely free to use, but you must sign up first!</p> <div class="mb-4"><label for="display-name" class="block text-gray-300 mb-2" data-svelte-h="svelte-nfx23">Username</label> <input id="display-name" name="display-name" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Display name"${add_attribute("value", displayName, 0)}></div> <div class="mb-4"><label for="email" class="block text-gray-300 mb-2" data-svelte-h="svelte-3a67ff">Email</label> <input id="email" name="email" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Email"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block text-gray-300 mb-2" data-svelte-h="svelte-11ilyyv">Password</label> <input id="password" type="password" name="password" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password"${add_attribute("value", password, 0)}></div> <div class="mb-4 flex justify-between">  <button class="w-1/3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" data-svelte-h="svelte-1iwbal5">Sign up</button> <button class="w-1/3 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600" data-svelte-h="svelte-u70yfr">Sign in</button></div></form></div>`;
     });
   }
 });
@@ -8801,7 +8802,7 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ??= (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default;
-    imports4 = ["_app/immutable/nodes/3.4xT4gQF0.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.HTgVpVhm.js", "_app/immutable/chunks/singletons.W-0CdNg9.js", "_app/immutable/chunks/stores.ZVuGaJ9t.js"];
+    imports4 = ["_app/immutable/nodes/3.08Gy1LVr.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.s0Ho3WJw.js", "_app/immutable/chunks/singletons.jECpAEwk.js", "_app/immutable/chunks/stores.tn5W0n_r.js"];
     stylesheets4 = [];
     fonts4 = [];
   }
@@ -8850,13 +8851,15 @@ var init_page_svelte3 = __esm({
       const numberSelections = ["Fibonacci"];
       let _numberSelection = numberSelections[0];
       async function syncPointingSession(session2) {
-        console.debug("rtu session", session2);
-        currentPointingSession.set(session2.new);
+        if (session2.new.last_updated > $currentPointingSession.last_updated) {
+          console.debug("syncPointingSession", session2);
+          currentPointingSession.set(session2.new);
+        }
       }
       async function syncGameState() {
         console.log("syncing game state", $currentPointingSession);
         await supabase.from("PointingSession").update({
-          users: $currentPointingSession.users,
+          // users: $currentPointingSession.users,
           game_state: $currentPointingSession.game_state,
           last_updated: currentTimestamp()
         }).eq("id", $currentPointingSession.id).select().single().then((updatedSession) => {
@@ -8931,7 +8934,7 @@ var init_page_svelte3 = __esm({
       $$unsubscribe_currentPointingSession();
       $$unsubscribe_currentUserProfile();
       return ` <div class="bg-gray-900 text-white p-8 min-h-screen flex flex-col justify-center items-center">${$currentPointingSession && session ? `<div class="grid grid-cols-3"><div><h1 class="text-3xl font-bold p-3"><h1><h3 class="font-bold text-2xl mb-2" data-svelte-h="svelte-1vfpxjc">Player Votes</h3> <ol>${each(activePlayers, (player) => {
-        return `${player.id === session.user.id ? `<li class="text-lg font-bold">${escape(player.displayName)}: ${escape(player.currentVote)}</li>` : `<li class="text-lg">${escape(player.displayName)}: ${escape(player.currentVote)}</li>`}`;
+        return `${player.id === session.user.id ? `<li class="text-lg font-bold text-yellow-200">${escape(player.displayName)}: ${escape(player.currentVote)}</li>` : `<li class="text-lg">${escape(player.displayName)}: ${escape(player.currentVote)}</li>`}`;
       })}</ol></h1></h1></div> <div>Select your pointing system:
 				<ul>${each(numberSelections, (selection) => {
         return `<li><button class="border border-1 border-round bg-gray-700 hoder:bg-gray-600 m-1 p-2"${add_attribute("aria-current", _numberSelection === selection, 0)}${add_attribute("aria-label", selection, 0)}>${escape(selection)}</button> </li>`;
@@ -8960,7 +8963,7 @@ var init__5 = __esm({
     index5 = 4;
     component5 = async () => component_cache5 ??= (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default;
     universal_id2 = "src/routes/points/[slug]/+page.js";
-    imports5 = ["_app/immutable/nodes/4.Pdg1-uRN.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/store.hw7zZTON.js", "_app/immutable/chunks/singletons.W-0CdNg9.js", "_app/immutable/chunks/navigation.HTgVpVhm.js"];
+    imports5 = ["_app/immutable/nodes/4.4Q6B-VeO.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/store._jQ-yhp_.js", "_app/immutable/chunks/singletons.jECpAEwk.js", "_app/immutable/chunks/navigation.s0Ho3WJw.js"];
     stylesheets5 = [];
     fonts5 = [];
   }
@@ -9001,7 +9004,7 @@ var init__6 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     index6 = 5;
     component6 = async () => component_cache6 ??= (await Promise.resolve().then(() => (init_page_svelte4(), page_svelte_exports4))).default;
-    imports6 = ["_app/immutable/nodes/5.wRoI2--l.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.HTgVpVhm.js", "_app/immutable/chunks/singletons.W-0CdNg9.js"];
+    imports6 = ["_app/immutable/nodes/5.Bd75u4SO.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js", "_app/immutable/chunks/navigation.s0Ho3WJw.js", "_app/immutable/chunks/singletons.jECpAEwk.js"];
     stylesheets6 = [];
     fonts6 = [];
   }
@@ -9211,7 +9214,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "40yrxw"
+  version_hash: "10pnj21"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -12600,7 +12603,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set(["favicon.png"]),
     mimeTypes: { ".png": "image/png" },
     _: {
-      client: { "start": "_app/immutable/entry/start.z22N9R2g.js", "app": "_app/immutable/entry/app.Js9w7WEb.js", "imports": ["_app/immutable/entry/start.z22N9R2g.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/singletons.W-0CdNg9.js", "_app/immutable/entry/app.Js9w7WEb.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
+      client: { "start": "_app/immutable/entry/start.SiU9Fb4U.js", "app": "_app/immutable/entry/app.xHeXZyY5.js", "imports": ["_app/immutable/entry/start.SiU9Fb4U.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/singletons.jECpAEwk.js", "_app/immutable/entry/app.xHeXZyY5.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.Z_PGJaWH.js", "_app/immutable/chunks/index.i8b6seFL.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
