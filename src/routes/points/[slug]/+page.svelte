@@ -165,7 +165,7 @@
 	});
 </script>
 
-<div class="bg-gray-900 text-white p-8 min-h-screen flex flex-col justify-center items-center">
+<div class="bg-zinc-900 text-yellow-100 p-8 min-h-screen flex flex-col justify-center items-center">
 	{#if $currentPointingSession && session}
 		<div class="grid grid-cols-3">
 			<div>
@@ -175,7 +175,7 @@
 						<ol>
 							{#each activePlayers as player}
 								{#if player.id === session.user.id}
-									<li class="text-lg font-bold text-yellow-200">{player.displayName}: {player.currentVote}</li>
+									<li class="text-lg font-bold text-lime-300">{player.displayName}: {player.currentVote}</li>
 								{:else}
 									<li class="text-lg">{player.displayName}: {player.currentVote}</li>
 								{/if}

@@ -24,32 +24,32 @@
 	});
 </script>
 
-<body class="flex flex-col h-screen">
-	<header class="bg-gray-800 text-white p-4">
+<body class="flex flex-col h-screen text-foreground">
+	<header class="bg-zinc-800 p-4">
 		<div class="flex justify-between items-center">
 			<div>
-				<a href="/" class="text-xl hover:text-gray-300">Home</a>
+				<a href="/" class="text-xl hover:text-amber-500">Home</a>
 			</div>
 			<div>
 				{#if data.session}
-					<a href="/profile" class="text-xl hover:text-gray-300">Profile</a>
+					<a href="/profile" class="text-xl hover:text-amber-500">Profile</a>
 				{:else}
-					<a href="/auth" class="text-xl hover:text-gray-300">Sign In</a>
+					<a href="/auth" class="text-xl hover:text-amber-500">Sign In</a>
 				{/if}
 			</div>
 		</div>
 	</header>
 
-	<main class="flex-grow bg-gray-800 w-full">
+	<main class="flex-grow bg-zinc-900 w-full">
 		<slot />
 	</main>
 
-	<footer class="bg-gray-800 text-white p-4 fixed bottom-0 inset-x-0">
+	<footer class="bg-zinc-800 p-4 fixed bottom-0 inset-x-0">
 		<div class="flex justify-center">
 			<a
 				target="_blank"
 				href="https://github.com/Pachwenko/points"
-				class="text-xl hover:text-gray-300">Source</a
+				class="text-xl hover:text-amber-500">Source</a
 			>
 		</div>
 	</footer>
