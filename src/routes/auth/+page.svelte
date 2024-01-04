@@ -70,7 +70,7 @@
 			Welcome! This site is completely free to use, but you must sign up first!
 		</p>
 		<div class="mb-4">
-			<label for="display-name" class="block  mb-2">Username</label>
+			<label for="display-name" class="block  mb-2">Display Name</label>
 			<input
 				id="display-name"
 				name="display-name"
