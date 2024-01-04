@@ -19,6 +19,7 @@
 	import { onMount } from 'svelte';
 
 	import { currentPointingSession, currentUserProfile } from '$lib/store.js';
+	import Button from '$lib/components/button.svelte';
 	export let data;
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
@@ -165,7 +166,7 @@
 	});
 </script>
 
-<div class="bg-zinc-900 text-yellow-100 p-8 min-h-screen flex flex-col justify-center items-center">
+<div class="text-yellow-100 p-8 h-full flex flex-col justify-center items-center">
 	{#if $currentPointingSession && session}
 		<div class="grid grid-cols-3">
 			<div>
@@ -185,25 +186,23 @@
 				</h1>
 			</div>
 			<div>
-				Select your pointing system:
+				<!-- Select your pointing system:
 				<ul>
 					{#each numberSelections as selection}
 						<li>
-							<button
-								class="border border-1 border-round bg-gray-700 hoder:bg-gray-600 m-1 p-2"
+							<Button
 								aria-current={_numberSelection === selection}
 								aria-label={selection}
-								on:click={() => (_numberSelection = selection)}>{selection}</button
+								on:click={() => (_numberSelection = selection)}>{selection}</Button
 							>
 						</li>
 					{/each}
-				</ul>
+				</ul> -->
 				{#each possibleNumbers as number}
-					<button
-						class="border border-1 m-1 p-1"
+					<Button
 						aria-current={_numberSelection === number}
 						aria-label={number}
-						on:click={() => vote(number)}>{number}</button
+						on:click={() => vote(number)}>{number}</Button
 					>
 				{/each}
 			</div>

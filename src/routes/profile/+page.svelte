@@ -70,13 +70,13 @@
 </script>
 
 {#if data.session}
-	<div class="min-h-screen flex justify-center items-center bg-gray-900">
-		<form on:submit={handleSaveChanges} class="bg-gray-800 p-6 rounded-lg w-full max-w-md">
+	<div class="h-full flex justify-center items-center">
+		<form on:submit={handleSaveChanges} class="bg-zinc-800 p-6 rounded-lg w-full max-w-md">
 			{#if message}
-				<p class="text-gray-300 text-2xl text-center border border-2">{message}</p>
+				<p class=" text-2xl text-center border border-2">{message}</p>
 			{/if}
 			<div class="mb-4">
-				<label for="display-name" class="block text-gray-300 mb-2">Display Name</label>
+				<label for="display-name" class="block  mb-2">Display Name</label>
 				<input
 					id="display-name"
 					name="display_name"
@@ -86,7 +86,7 @@
 				/>
 			</div>
 			<div class="mb-4">
-				<label for="email" class="block text-gray-300 mb-2">Email</label>
+				<label for="email" class="block  mb-2">Email</label>
 				<input
 					id="email"
 					name="email"
@@ -96,7 +96,7 @@
 				/>
 			</div>
 			<div class="mb-4">
-				<label for="password" class="block text-gray-300 mb-2">New Password</label>
+				<label for="password" class="block  mb-2">New Password</label>
 				<input
 					id="password"
 					name="password"
@@ -105,7 +105,7 @@
 					placeholder="new password"
 				/>
 			</div>
-			<button class="w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+			<button class="w-full p-3 bg-aqua text-white rounded-lg hover:bg-dim-aqua"
 				>Save Changes</button
 			>
 			<button

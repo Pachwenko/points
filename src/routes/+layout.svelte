@@ -24,8 +24,8 @@
 	});
 </script>
 
-<body class="flex flex-col h-screen text-foreground">
-	<header class="bg-zinc-800 p-4">
+<body class="flex flex-col h-screen bg-hard-background text-foreground">
+	<header class="p-4 border border-zinc-700 border-bottom-2">
 		<div class="flex justify-between items-center">
 			<div>
 				<a href="/" class="text-xl hover:text-amber-500">Home</a>
@@ -40,11 +40,11 @@
 		</div>
 	</header>
 
-	<main class="flex-grow bg-zinc-900 w-full">
+	<main class="flex-grow w-full">
 		<slot />
 	</main>
 
-	<footer class="bg-zinc-800 p-4 fixed bottom-0 inset-x-0">
+	<footer class="p-4 fixed bottom-0 inset-x-0 border border-zinc-700 border-top-2">
 		<div class="flex justify-center">
 			<a
 				target="_blank"
