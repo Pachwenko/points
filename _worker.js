@@ -8693,7 +8693,7 @@ var init_layout_svelte = __esm({
       let { data } = $$props;
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
-      return `<body class="flex flex-col h-screen text-foreground"><header class="bg-zinc-800 p-4"><div class="flex justify-between items-center"><div data-svelte-h="svelte-1udc6t4"><a href="/" class="text-xl hover:text-amber-500">Home</a></div> <div>${data.session ? `<a href="/profile" class="text-xl hover:text-amber-500" data-svelte-h="svelte-1lz65nx">Profile</a>` : `<a href="/auth" class="text-xl hover:text-amber-500" data-svelte-h="svelte-1rt55lh">Sign In</a>`}</div></div></header> <main class="flex-grow bg-zinc-900 w-full">${slots.default ? slots.default({}) : ``}</main> <footer class="bg-zinc-800 p-4 fixed bottom-0 inset-x-0" data-svelte-h="svelte-1q5p5ub"><div class="flex justify-center"><a target="_blank" href="https://github.com/Pachwenko/points" class="text-xl hover:text-amber-500">Source</a></div></footer></body>`;
+      return `<body class="flex flex-col h-screen bg-hard-background text-foreground"><header class="p-4 border border-zinc-700 border-bottom-2"><div class="flex justify-between items-center"><div data-svelte-h="svelte-1udc6t4"><a href="/" class="text-xl hover:text-amber-500">Home</a></div> <div>${data.session ? `<a href="/profile" class="text-xl hover:text-amber-500" data-svelte-h="svelte-1lz65nx">Profile</a>` : `<a href="/auth" class="text-xl hover:text-amber-500" data-svelte-h="svelte-1rt55lh">Sign In</a>`}</div></div></header> <main class="flex-grow w-full">${slots.default ? slots.default({}) : ``}</main> <footer class="p-4 fixed bottom-0 inset-x-0 border border-zinc-700 border-top-2" data-svelte-h="svelte-p3pc5q"><div class="flex justify-center"><a target="_blank" href="https://github.com/Pachwenko/points" class="text-xl hover:text-amber-500">Source</a></div></footer></body>`;
     });
   }
 });
@@ -8720,8 +8720,8 @@ var init__ = __esm({
     component = async () => component_cache ??= (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default;
     universal_id = "src/routes/+layout.js";
     server_id = "src/routes/+layout.server.js";
-    imports = ["_app/immutable/nodes/0.wzkCnIDS.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.qjSdMX96.js", "_app/immutable/chunks/index.Asz5LQEO.js", "_app/immutable/chunks/navigation.Om4PnJII.js", "_app/immutable/chunks/singletons.n3BBpXeA.js"];
-    stylesheets = ["_app/immutable/assets/0.3Tf6WDmd.css"];
+    imports = ["_app/immutable/nodes/0.8GaB40fN.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.Wc5SLlpQ.js", "_app/immutable/chunks/singletons.t0DlXnWr.js"];
+    stylesheets = ["_app/immutable/assets/0.3F0rnlr-.css"];
     fonts = [];
   }
 });
@@ -8788,20 +8788,28 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ??= (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    imports2 = ["_app/immutable/nodes/1.PJOD1a9Q.js", "_app/immutable/chunks/scheduler.qjSdMX96.js", "_app/immutable/chunks/index.Asz5LQEO.js", "_app/immutable/chunks/stores._-tSnA0q.js", "_app/immutable/chunks/singletons.n3BBpXeA.js"];
+    imports2 = ["_app/immutable/nodes/1.gNSax5eu.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/stores.4qpRnjOT.js", "_app/immutable/chunks/singletons.t0DlXnWr.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
 });
 
-// .svelte-kit/output/server/chunks/store.js
-var currentUserSessions, currentPointingSession, currentUserProfile;
-var init_store = __esm({
-  ".svelte-kit/output/server/chunks/store.js"() {
+// .svelte-kit/output/server/chunks/button.js
+var currentUserSessions, currentPointingSession, currentUserProfile, Button;
+var init_button = __esm({
+  ".svelte-kit/output/server/chunks/button.js"() {
     init_index2();
+    init_ssr();
     currentUserSessions = writable([]);
     currentPointingSession = writable({});
     currentUserProfile = writable({});
+    Button = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $$restProps = compute_rest_props($$props, ["classes"]);
+      let { classes = "bg-transparent border border-solid border-dim-orange hover:bg-dim-orange text-foreground font-bold m-2 py-2 px-4 rounded active:bg-orange ease-linear transition-all duration-150" } = $$props;
+      if ($$props.classes === void 0 && $$bindings.classes && classes !== void 0)
+        $$bindings.classes(classes);
+      return `<button${spread([{ class: escape_attribute_value(classes) }, escape_object($$restProps)], {})}>${slots.default ? slots.default({}) : ``}</button>`;
+    });
   }
 });
 
@@ -8810,18 +8818,11 @@ var page_svelte_exports = {};
 __export(page_svelte_exports, {
   default: () => Page
 });
-var Button, Page;
+var Page;
 var init_page_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/_page.svelte.js"() {
     init_ssr();
-    init_store();
-    Button = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      let $$restProps = compute_rest_props($$props, ["classes"]);
-      let { classes = "bg-transparent border border-solid border-dim-orange hover:bg-dim-orange text-foreground font-bold m-2 py-2 px-4 rounded active:bg-orange ease-linear transition-all duration-150" } = $$props;
-      if ($$props.classes === void 0 && $$bindings.classes && classes !== void 0)
-        $$bindings.classes(classes);
-      return `<button${spread([{ class: escape_attribute_value(classes) }, escape_object($$restProps)], {})}>${slots.default ? slots.default({}) : ``}</button>`;
-    });
+    init_button();
     Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let $currentUserProfile, $$unsubscribe_currentUserProfile;
       let $currentUserSessions, $$unsubscribe_currentUserSessions;
@@ -8877,7 +8878,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ??= (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    imports3 = ["_app/immutable/nodes/2.dY8XRWcJ.js", "_app/immutable/chunks/scheduler.qjSdMX96.js", "_app/immutable/chunks/index.Asz5LQEO.js", "_app/immutable/chunks/store.674mkOx1.js", "_app/immutable/chunks/singletons.n3BBpXeA.js", "_app/immutable/chunks/navigation.Om4PnJII.js"];
+    imports3 = ["_app/immutable/nodes/2.C6Bcwznz.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.86666sEH.js", "_app/immutable/chunks/singletons.t0DlXnWr.js", "_app/immutable/chunks/navigation.Wc5SLlpQ.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -8922,7 +8923,7 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ??= (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default;
-    imports4 = ["_app/immutable/nodes/3.tMRWLHmP.js", "_app/immutable/chunks/scheduler.qjSdMX96.js", "_app/immutable/chunks/index.Asz5LQEO.js", "_app/immutable/chunks/navigation.Om4PnJII.js", "_app/immutable/chunks/singletons.n3BBpXeA.js", "_app/immutable/chunks/stores._-tSnA0q.js"];
+    imports4 = ["_app/immutable/nodes/3.D1k0eM9J.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.Wc5SLlpQ.js", "_app/immutable/chunks/singletons.t0DlXnWr.js", "_app/immutable/chunks/stores.4qpRnjOT.js"];
     stylesheets4 = [];
     fonts4 = [];
   }
@@ -8958,7 +8959,7 @@ var Page3;
 var init_page_svelte3 = __esm({
   ".svelte-kit/output/server/entries/pages/points/_slug_/_page.svelte.js"() {
     init_ssr();
-    init_store();
+    init_button();
     Page3 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let $currentPointingSession, $$unsubscribe_currentPointingSession;
       let $currentUserProfile, $$unsubscribe_currentUserProfile;
@@ -9041,7 +9042,7 @@ var init_page_svelte3 = __esm({
         }
       }
       {
-        if (_numberSelection) {
+        {
           const numbersData = {
             Fibonacci: {
               name: "Fibonacci",
@@ -9055,11 +9056,20 @@ var init_page_svelte3 = __esm({
       $$unsubscribe_currentUserProfile();
       return `<div class="bg-zinc-900 text-yellow-100 p-8 min-h-screen flex flex-col justify-center items-center">${$currentPointingSession && session ? `<div class="grid grid-cols-3"><div><h1 class="text-3xl font-bold p-3"><h1><h3 class="font-bold text-2xl mb-2" data-svelte-h="svelte-1vfpxjc">Player Votes</h3> <ol>${each(activePlayers, (player) => {
         return `${player.id === session.user.id ? `<li class="text-lg font-bold text-lime-300">${escape(player.displayName)}: ${escape(player.currentVote)}</li>` : `<li class="text-lg">${escape(player.displayName)}: ${escape(player.currentVote)}</li>`}`;
-      })}</ol></h1></h1></div> <div>Select your pointing system:
-				<ul>${each(numberSelections, (selection) => {
-        return `<li><button class="border border-1 border-round bg-gray-700 hoder:bg-gray-600 m-1 p-2"${add_attribute("aria-current", _numberSelection === selection, 0)}${add_attribute("aria-label", selection, 0)}>${escape(selection)}</button> </li>`;
-      })}</ul> ${each(possibleNumbers, (number) => {
-        return `<button class="border border-1 m-1 p-1"${add_attribute("aria-current", _numberSelection === number, 0)}${add_attribute("aria-label", number, 0)}>${escape(number)}</button>`;
+      })}</ol></h1></h1></div> <div> ${each(possibleNumbers, (number) => {
+        return `${validate_component(Button, "Button").$$render(
+          $$result,
+          {
+            "aria-current": _numberSelection === number,
+            "aria-label": number
+          },
+          {},
+          {
+            default: () => {
+              return `${escape(number)}`;
+            }
+          }
+        )}`;
       })}</div> <div></div></div>` : ``}</div>`;
     });
   }
@@ -9083,7 +9093,7 @@ var init__5 = __esm({
     index5 = 4;
     component5 = async () => component_cache5 ??= (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default;
     universal_id2 = "src/routes/points/[slug]/+page.js";
-    imports5 = ["_app/immutable/nodes/4.nN6ioU0r.js", "_app/immutable/chunks/scheduler.qjSdMX96.js", "_app/immutable/chunks/index.Asz5LQEO.js", "_app/immutable/chunks/store.674mkOx1.js", "_app/immutable/chunks/singletons.n3BBpXeA.js", "_app/immutable/chunks/navigation.Om4PnJII.js"];
+    imports5 = ["_app/immutable/nodes/4.NuUx3cEM.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.86666sEH.js", "_app/immutable/chunks/singletons.t0DlXnWr.js", "_app/immutable/chunks/navigation.Wc5SLlpQ.js"];
     stylesheets5 = [];
     fonts5 = [];
   }
@@ -9105,7 +9115,7 @@ var init_page_svelte4 = __esm({
       let password = "";
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
-      return `${data.session ? `<div class="min-h-screen flex justify-center items-center bg-gray-900"><form class="bg-gray-800 p-6 rounded-lg w-full max-w-md">${``} <div class="mb-4"><label for="display-name" class="block text-gray-300 mb-2" data-svelte-h="svelte-1l1bv0c">Display Name</label> <input id="display-name" name="display_name" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Display Name"${add_attribute("value", displayName, 0)}></div> <div class="mb-4"><label for="email" class="block text-gray-300 mb-2" data-svelte-h="svelte-3a67ff">Email</label> <input id="email" name="email" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="me@example.com"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block text-gray-300 mb-2" data-svelte-h="svelte-hwxk3l">New Password</label> <input id="password" name="password" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="new password"${add_attribute("value", password, 0)}></div> <button class="w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600" data-svelte-h="svelte-1m4tkw0">Save Changes</button> <button class="w-full mt-4 p-3 bg-red-500 text-white rounded-lg hover:bg-red-600" data-svelte-h="svelte-1k2o8tq">Sign out</button></form></div>` : ``}`;
+      return `${data.session ? `<div class="min-h-screen flex justify-center items-center"><form class="bg-zinc-800 p-6 rounded-lg w-full max-w-md">${``} <div class="mb-4"><label for="display-name" class="block mb-2" data-svelte-h="svelte-e0rvjn">Display Name</label> <input id="display-name" name="display_name" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Display Name"${add_attribute("value", displayName, 0)}></div> <div class="mb-4"><label for="email" class="block mb-2" data-svelte-h="svelte-9puw6w">Email</label> <input id="email" name="email" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="me@example.com"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block mb-2" data-svelte-h="svelte-c9vn0y">New Password</label> <input id="password" name="password" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="new password"${add_attribute("value", password, 0)}></div> <button class="w-full p-3 bg-aqua text-white rounded-lg hover:bg-dim-aqua" data-svelte-h="svelte-1ibyomg">Save Changes</button> <button class="w-full mt-4 p-3 bg-red-500 text-white rounded-lg hover:bg-red-600" data-svelte-h="svelte-1k2o8tq">Sign out</button></form></div>` : ``}`;
     });
   }
 });
@@ -9124,7 +9134,7 @@ var init__6 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     index6 = 5;
     component6 = async () => component_cache6 ??= (await Promise.resolve().then(() => (init_page_svelte4(), page_svelte_exports4))).default;
-    imports6 = ["_app/immutable/nodes/5.dXoK_BaV.js", "_app/immutable/chunks/scheduler.qjSdMX96.js", "_app/immutable/chunks/index.Asz5LQEO.js", "_app/immutable/chunks/navigation.Om4PnJII.js", "_app/immutable/chunks/singletons.n3BBpXeA.js"];
+    imports6 = ["_app/immutable/nodes/5.iJPvOZFC.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.Wc5SLlpQ.js", "_app/immutable/chunks/singletons.t0DlXnWr.js"];
     stylesheets6 = [];
     fonts6 = [];
   }
@@ -9334,7 +9344,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1prz0ez"
+  version_hash: "474u4a"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -12723,7 +12733,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set(["favicon.png"]),
     mimeTypes: { ".png": "image/png" },
     _: {
-      client: { "start": "_app/immutable/entry/start.D8-ZwLYx.js", "app": "_app/immutable/entry/app.qXxSKl0r.js", "imports": ["_app/immutable/entry/start.D8-ZwLYx.js", "_app/immutable/chunks/scheduler.qjSdMX96.js", "_app/immutable/chunks/singletons.n3BBpXeA.js", "_app/immutable/entry/app.qXxSKl0r.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.qjSdMX96.js", "_app/immutable/chunks/index.Asz5LQEO.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
+      client: { "start": "_app/immutable/entry/start.joe2AAdm.js", "app": "_app/immutable/entry/app.SVza-9xb.js", "imports": ["_app/immutable/entry/start.joe2AAdm.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/singletons.t0DlXnWr.js", "_app/immutable/entry/app.SVza-9xb.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
