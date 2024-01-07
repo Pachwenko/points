@@ -8820,7 +8820,7 @@ var init__ = __esm({
     component = async () => component_cache ??= (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default;
     universal_id = "src/routes/+layout.js";
     server_id = "src/routes/+layout.server.js";
-    imports = ["_app/immutable/nodes/0.-p6N_lDr.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.QDMdLvta.js", "_app/immutable/chunks/singletons.Fw4D6oIh.js"];
+    imports = ["_app/immutable/nodes/0.rbwstklR.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.f6KkA-yC.js", "_app/immutable/chunks/singletons.Dwa_NDyU.js"];
     stylesheets = ["_app/immutable/assets/0.-sboOkQB.css"];
     fonts = [];
   }
@@ -8888,7 +8888,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ??= (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    imports2 = ["_app/immutable/nodes/1.req8hbcl.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/stores.N7BCcJae.js", "_app/immutable/chunks/singletons.Fw4D6oIh.js"];
+    imports2 = ["_app/immutable/nodes/1.qLcYUvSG.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/stores.9tPDxMMx.js", "_app/immutable/chunks/singletons.Dwa_NDyU.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -8989,7 +8989,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ??= (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    imports3 = ["_app/immutable/nodes/2.oFxHoBzu.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.m6kBqmDN.js", "_app/immutable/chunks/singletons.Fw4D6oIh.js", "_app/immutable/chunks/navigation.QDMdLvta.js"];
+    imports3 = ["_app/immutable/nodes/2.jaehZc2t.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.Wg8vTYYf.js", "_app/immutable/chunks/singletons.Dwa_NDyU.js", "_app/immutable/chunks/navigation.f6KkA-yC.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -9015,7 +9015,7 @@ var init_page_svelte2 = __esm({
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
       $$unsubscribe_page();
-      return `  <div class="flex flex-grow h-full justify-center items-center"><form class="container mx-auto p-6 rounded-lg w-full max-w-md"><p class="text-2xl mb-5" data-svelte-h="svelte-ie8qrn">Welcome! This site is completely free to use, but you must sign up first!</p> ${``} <div class="mb-4"><label for="display-name" class="block mb-2" data-svelte-h="svelte-xvxr5t">Display Name</label> <input id="display-name" name="display-name" class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Display name"${add_attribute("value", displayName, 0)}></div> <div class="mb-4"><label for="email" class="block mb-2" data-svelte-h="svelte-5n7jdk">Email</label> <input id="email" name="email" class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Email"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block mb-2" data-svelte-h="svelte-kmyewi">Password</label> <input id="password" type="password" name="password" class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password"${add_attribute("value", password, 0)}></div> <div class="mb-4 flex justify-between">  <button class="w-1/3 px-4 py-2 bg-aqua text-white rounded-lg hover:bg-dim-aqua" data-svelte-h="svelte-528h29">Sign Up</button> <button class="w-1/3 px-4 py-2 bg-green text-white rounded-lg hover:bg-dim-green" data-svelte-h="svelte-1v0t4w1">Sign In</button></div></form></div>`;
+      return `  <div class="flex flex-grow h-full justify-center items-center"><form class="container mx-auto p-6 rounded-lg w-full max-w-md"><p class="text-2xl mb-5" data-svelte-h="svelte-ie8qrn">Welcome! This site is completely free to use, but you must sign up first!</p> ${``} <div class="mb-4"><label for="display-name" class="block mb-2" data-svelte-h="svelte-xvxr5t">Display Name</label> <input id="display-name" name="display-name" class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Display name"${add_attribute("value", displayName, 0)}></div> <div class="mb-4"><label for="email" class="block mb-2" data-svelte-h="svelte-5n7jdk">Email</label> <input required id="email" name="email" class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Email"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block mb-2" data-svelte-h="svelte-kmyewi">Password</label> <input required id="password" type="password" name="password" class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password"${add_attribute("value", password, 0)}></div> <div class="mb-4 flex justify-between">  <button class="w-1/3 px-4 py-2 bg-aqua text-white rounded-lg hover:bg-dim-aqua" data-svelte-h="svelte-528h29">Sign Up</button> <button class="w-1/3 px-4 py-2 bg-green text-white rounded-lg hover:bg-dim-green" data-test-id="sign-in" data-svelte-h="svelte-cxkdfg">Sign In</button></div></form></div>`;
     });
   }
 });
@@ -9034,7 +9034,7 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ??= (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default;
-    imports4 = ["_app/immutable/nodes/3.XAoibNbB.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.QDMdLvta.js", "_app/immutable/chunks/singletons.Fw4D6oIh.js", "_app/immutable/chunks/stores.N7BCcJae.js"];
+    imports4 = ["_app/immutable/nodes/3.-N66g_Uo.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.f6KkA-yC.js", "_app/immutable/chunks/singletons.Dwa_NDyU.js", "_app/immutable/chunks/stores.9tPDxMMx.js"];
     stylesheets4 = [];
     fonts4 = [];
   }
@@ -9247,7 +9247,7 @@ var init__5 = __esm({
     index5 = 4;
     component5 = async () => component_cache5 ??= (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default;
     universal_id2 = "src/routes/points/[slug]/+page.js";
-    imports5 = ["_app/immutable/nodes/4.2QJsDKHQ.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.m6kBqmDN.js", "_app/immutable/chunks/singletons.Fw4D6oIh.js", "_app/immutable/chunks/navigation.QDMdLvta.js"];
+    imports5 = ["_app/immutable/nodes/4.PSIbut_1.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.Wg8vTYYf.js", "_app/immutable/chunks/singletons.Dwa_NDyU.js", "_app/immutable/chunks/navigation.f6KkA-yC.js"];
     stylesheets5 = [];
     fonts5 = [];
   }
@@ -9288,7 +9288,7 @@ var init__6 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     index6 = 5;
     component6 = async () => component_cache6 ??= (await Promise.resolve().then(() => (init_page_svelte4(), page_svelte_exports4))).default;
-    imports6 = ["_app/immutable/nodes/5.bXekB4qz.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.QDMdLvta.js", "_app/immutable/chunks/singletons.Fw4D6oIh.js"];
+    imports6 = ["_app/immutable/nodes/5.mO1bqFqW.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.f6KkA-yC.js", "_app/immutable/chunks/singletons.Dwa_NDyU.js"];
     stylesheets6 = [];
     fonts6 = [];
   }
@@ -9498,7 +9498,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1468nbo"
+  version_hash: "hs3v6k"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -12892,7 +12892,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set(["favicon.png"]),
     mimeTypes: { ".png": "image/png" },
     _: {
-      client: { "start": "_app/immutable/entry/start.NoIq2uo_.js", "app": "_app/immutable/entry/app.jwtxFmqv.js", "imports": ["_app/immutable/entry/start.NoIq2uo_.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/singletons.Fw4D6oIh.js", "_app/immutable/entry/app.jwtxFmqv.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
+      client: { "start": "_app/immutable/entry/start.szkipnco.js", "app": "_app/immutable/entry/app.DFK8BtQT.js", "imports": ["_app/immutable/entry/start.szkipnco.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/singletons.Dwa_NDyU.js", "_app/immutable/entry/app.DFK8BtQT.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
