@@ -57,6 +57,10 @@
 	};
 
 	const handleSignIn = async () => {
+		if (!email || !password) {
+			errorMessage = 'Please enter your email and password to log in.'
+			return;
+		}
 		supabase.auth
 			.signInWithPassword({
 				email,
@@ -85,7 +89,13 @@
 			Welcome! This site is completely free to use, but you must sign up first!
 		</p>
 		{#if errorMessage}
-			<p id="error" class="text-red-600 text-center text-2xl font-bold mb-3">{errorMessage}</p>
+			<p
+				id="error"
+				class="text-red-600 text-center text-2xl font-bold mb-3"
+				data-test-id="error-message"
+			>
+				{errorMessage}
+			</p>
 		{/if}
 		<div class="mb-4">
 			<label for="display-name" class="block mb-2">Display Name</label>
@@ -100,6 +110,7 @@
 		<div class="mb-4">
 			<label for="email" class="block mb-2">Email</label>
 			<input
+				required
 				id="email"
 				name="email"
 				bind:value={email}
@@ -110,6 +121,7 @@
 		<div class="mb-4">
 			<label for="password" class="block mb-2">Password</label>
 			<input
+				required
 				id="password"
 				type="password"
 				name="password"
@@ -127,7 +139,7 @@
 			>
 			<button
 				on:click={handleSignIn}
-				class="w-1/3 px-4 py-2 bg-green text-white rounded-lg hover:bg-dim-green">Sign In</button
+				class="w-1/3 px-4 py-2 bg-green text-white rounded-lg hover:bg-dim-green" data-test-id="sign-in">Sign In</button
 			>
 		</div>
 	</form>
