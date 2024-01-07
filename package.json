@@ -2,17 +2,17 @@
 	"name": "points",
 	"version": "0.0.1",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
-		"test": "npm run test:integration && npm run test:unit",
+		"test": "npm run test:e2e",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
-		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"test:e2e": "cypress run"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-cloudflare": "^3.0.1",
@@ -30,10 +30,8 @@
 		"svelte-check": "^3.6.0",
 		"tailwindcss": "^3.3.6",
 		"typescript": "^5.0.0",
-		"vite": "^5.0.3",
-		"vitest": "^0.32.2"
+		"vite": "^5.0.3"
 	},
-	"type": "module",
 	"dependencies": {
 		"@supabase/auth-helpers-sveltekit": "^0.10.7",
 		"@supabase/supabase-js": "^2.39.0",

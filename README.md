@@ -15,6 +15,15 @@ npm run dev
 
 You can preview the production build with `npm run preview`. You should do this before deploying to make sure everything looks right!
 
+## Testing
+
+This project uses [Cypress](https://cypress.io) for E2E testing. There currently are no component level tests, but they may be included in the future (may vitest?).
+
+To open the cypress runner yourself do `npx cypress open` and to just run the tests `npm run test`
+
+A helpful link to the assertions you can do: https://docs.cypress.io/guides/references/assertions
+
+Doing our best to follow the Cypress best practices outlined here https://docs.cypress.io/guides/references/best-practices
 
 # [Supabase](https://supabase.com/)
 
