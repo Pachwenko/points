@@ -50,7 +50,6 @@
 			.contains('users', [data.session?.user.id])
 			.order('last_updated', { ascending: false })
 			.then((sessions) => {
-				// supabase.from('PointingSession').select().then((sessions) => {
 				currentUserSessions.set(sessions.data);
 			});
 		supabase

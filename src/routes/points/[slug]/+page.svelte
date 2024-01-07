@@ -9,8 +9,7 @@
 	 *          'abc-1234-xyz': {
 	 *              id: 'abc-1234-xyz',
 	 *              displayName: 'test-user-1',
-	 *              currentVote: 0,
-	 *          }
+	 *              currentVote: 0, *          }
 	 *      },
 	 * }
 	 */
@@ -45,27 +44,31 @@
 	}
 
 	async function vote(number) {
-		console.log(`Voted ${number}`, session.user.id);
-		// TODO: also post other game state data here,
-		// like last_updated should be current time
-		$currentPointingSession.game_state.activePlayers[session.user.id].currentVote = number;
-		$currentPointingSession.game_state.activePlayers[session.user.id].displayName = $currentUserProfile.display_name;
+		// console.log(`Voted ${number}`, session.user.id);
+		currentVote = number;
+		$currentPointingSession.game_state.activePlayers[session.user.id].currentVote = currentVote;
+		$currentPointingSession.game_state.activePlayers[session.user.id].displayName =
+			$currentUserProfile.display_name;
 		$currentPointingSession.game_state.last_updated = currentTimestamp();
 		await syncGameState();
 	}
 
 	async function clearVotes() {
 		// wipe out all votes in the game state and sync the game state
+		currentVote = '';
+		Object.entries($currentPointingSession.game_state.activePlayers).forEach(([_id, player]) => {
+			player.currentVote = '';
+			return player;
+		});
+		await syncGameState();
 	}
 
 	async function syncGameState() {
-		console.log('syncing game state', $currentPointingSession);
 		await supabase
 			.from('PointingSession')
 			.update({
-				// users: $currentPointingSession.users,
 				game_state: $currentPointingSession.game_state,
-				last_updated: currentTimestamp()
+				last_updated: $currentPointingSession.last_updated
 			})
 			.eq('id', $currentPointingSession.id)
 			.select()
@@ -73,7 +76,7 @@
 			.then((updatedSession) => {
 				if (updatedSession.data) {
 					currentPointingSession.set(updatedSession.data);
-					console.log('updated game state', updatedSession);
+					console.log('synced game state', updatedSession);
 				}
 				if (updatedSession.error) {
 					console.error('error updating game state', updatedSession.error);
@@ -89,7 +92,6 @@
 			.limit(1)
 			.single()
 			.then((profile) => {
-				console.log('profile', profile);
 				if (profile?.data) {
 					currentUserProfile.set(profile.data);
 				} else {
@@ -102,12 +104,11 @@
 			.eq('id', data.slug)
 			.single()
 			.then((pointingSession) => {
-				//  TODO: handle scenario where invalid slug was given
-				console.log('Got pointing session', pointingSession, currentPointingSession);
+				console.log('Got the pointing session', pointingSession);
 				if (pointingSession.data) {
-					// subscribe!
+					// subscribe to changes in realtime!
 					realtimeChannel = supabase
-						.channel(`${data.slug}-${session.user.id}`) // new channel for each user based on session id
+						.channel(`${data.slug}`) // new channel for each user based on session id
 						.on(
 							'postgres_changes',
 							{
@@ -119,17 +120,26 @@
 							(payload) => syncPointingSession(payload)
 						)
 						.subscribe();
-					console.log('subscribing to reatltime updates', pointingSession.data.id, realtimeChannel);
 
-					// check if current user is tied to session, if not update the session to add user!
-					console.log('adding player to session', session.user.id);
-					pointingSession.data.game_state.activePlayers[session.user.id] = {
-						id: session.user.id,
-						displayName: $currentUserProfile.display_name,
-						currentVote: ''
-					};
+					if (Object.hasOwn(pointingSession.data.game_state.activePlayers, session.user.id)) {
+						console.log('syncing display name')
+						pointingSession.data.game_state.activePlayers[session.user.id] = {
+							...pointingSession.data.game_state.activePlayers[session.user.id],
+							displayName: $currentUserProfile.display_name // sync display name (incase user changed it!)
+						};
+					} else {
+						pointingSession.data.game_state.activePlayers[session.user.id] = {
+							currentVote: '',
+							id: session.user.id,
+							displayName: $currentUserProfile.display_name
+						};
+					}
 					currentPointingSession.set(pointingSession.data);
 					syncGameState();
+				} else {
+					// TODO: we should display a message saying the session was not found and to
+					// go back home or start a new session (refactor creation to util function)
+					goto('/');
 				}
 			});
 	}
@@ -176,7 +186,9 @@
 						<ol>
 							{#each activePlayers as player}
 								{#if player.id === session.user.id}
-									<li class="text-lg font-bold text-lime-300">{player.displayName}: {player.currentVote}</li>
+									<li class="text-lg font-bold text-lime-300">
+										{player.displayName}: {player.currentVote}
+									</li>
 								{:else}
 									<li class="text-lg">{player.displayName}: {player.currentVote}</li>
 								{/if}
@@ -186,7 +198,7 @@
 				</h1>
 			</div>
 			<div>
-				<!-- Select your pointing system:
+				Select your pointing system:
 				<ul>
 					{#each numberSelections as selection}
 						<li>
@@ -197,16 +209,21 @@
 							>
 						</li>
 					{/each}
-				</ul> -->
+				</ul>
+				<h1 class="text-red text-3xl">Hihihi</h1>
+				{/if}
 				{#each possibleNumbers as number}
 					<Button
-						aria-current={_numberSelection === number}
+						aria-current={currentVote === number}
 						aria-label={number}
+						selected={currentVote === number}
 						on:click={() => vote(number)}>{number}</Button
 					>
 				{/each}
 			</div>
-			<div></div>
+			<div>
+				<Button on:click={() => clearVotes()}>Clear Votes</Button>
+			</div>
 		</div>
 	{/if}
 </div>
