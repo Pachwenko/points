@@ -2,7 +2,7 @@
 	// @ts-nocheck
 
 	/**
-	 * Welcome to pointsnothours!
+	 * Welcome to points!
 	 * Made by Patrick aka Pachwenko
 	 * https://github.com/Pachwenko
 	 */

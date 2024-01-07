@@ -210,8 +210,6 @@
 						</li>
 					{/each}
 				</ul>
-				<h1 class="text-red text-3xl">Hihihi</h1>
-				{/if}
 				{#each possibleNumbers as number}
 					<Button
 						aria-current={currentVote === number}
