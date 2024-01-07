@@ -1568,6 +1568,10 @@ var init_PostgrestTransformBuilder = __esm({
       /**
        * Return `data` as the EXPLAIN plan for the query.
        *
+       * You need to enable the
+       * [db_plan_enabled](https://supabase.com/docs/guides/database/debugging-performance#enabling-explain)
+       * setting before using this method.
+       *
        * @param options - Named parameters
        *
        * @param options.analyze - If `true`, the query will be executed and the
@@ -2260,7 +2264,7 @@ var init_PostgrestQueryBuilder = __esm({
 var version;
 var init_version = __esm({
   "node_modules/@supabase/postgrest-js/dist/module/version.js"() {
-    version = "1.9.0";
+    version = "1.9.1";
   }
 });
 
@@ -2391,7 +2395,7 @@ var init_module2 = __esm({
 var version2;
 var init_version2 = __esm({
   "node_modules/@supabase/realtime-js/dist/module/lib/version.js"() {
-    version2 = "2.9.0";
+    version2 = "2.9.1";
   }
 });
 
@@ -3452,7 +3456,7 @@ var require_browser = __commonJS({
 });
 
 // node_modules/@supabase/realtime-js/dist/module/RealtimeClient.js
-var noop3, NATIVE_WEBSOCKET_AVAILABLE, WebSocketVariant, RealtimeClient;
+var noop3, NATIVE_WEBSOCKET_AVAILABLE, RealtimeClient, WSWebSocketDummy;
 var init_RealtimeClient = __esm({
   "node_modules/@supabase/realtime-js/dist/module/RealtimeClient.js"() {
     init_constants2();
@@ -3462,7 +3466,6 @@ var init_RealtimeClient = __esm({
     noop3 = () => {
     };
     NATIVE_WEBSOCKET_AVAILABLE = typeof WebSocket !== "undefined";
-    WebSocketVariant = NATIVE_WEBSOCKET_AVAILABLE ? WebSocket : require_browser();
     RealtimeClient = class {
       /**
        * Initializes the Socket.
@@ -3486,7 +3489,6 @@ var init_RealtimeClient = __esm({
         this.headers = DEFAULT_HEADERS2;
         this.params = {};
         this.timeout = DEFAULT_TIMEOUT;
-        this.transport = WebSocketVariant;
         this.heartbeatIntervalMs = 3e4;
         this.heartbeatTimer = void 0;
         this.pendingHeartbeatRef = null;
@@ -3513,6 +3515,11 @@ var init_RealtimeClient = __esm({
           return (...args) => _fetch(...args);
         };
         this.endPoint = `${endPoint}/${TRANSPORTS.websocket}`;
+        if (options2 === null || options2 === void 0 ? void 0 : options2.transport) {
+          this.transport = options2.transport;
+        } else {
+          this.transport = null;
+        }
         if (options2 === null || options2 === void 0 ? void 0 : options2.params)
           this.params = options2.params;
         if (options2 === null || options2 === void 0 ? void 0 : options2.headers)
@@ -3521,8 +3528,6 @@ var init_RealtimeClient = __esm({
           this.timeout = options2.timeout;
         if (options2 === null || options2 === void 0 ? void 0 : options2.logger)
           this.logger = options2.logger;
-        if (options2 === null || options2 === void 0 ? void 0 : options2.transport)
-          this.transport = options2.transport;
         if (options2 === null || options2 === void 0 ? void 0 : options2.heartbeatIntervalMs)
           this.heartbeatIntervalMs = options2.heartbeatIntervalMs;
         const accessToken = (_a = options2 === null || options2 === void 0 ? void 0 : options2.params) === null || _a === void 0 ? void 0 : _a.apikey;
@@ -3548,20 +3553,28 @@ var init_RealtimeClient = __esm({
         if (this.conn) {
           return;
         }
-        if (NATIVE_WEBSOCKET_AVAILABLE) {
-          this.conn = new this.transport(this._endPointURL());
-        } else {
+        if (this.transport) {
           this.conn = new this.transport(this._endPointURL(), void 0, {
             headers: this.headers
           });
+          return;
         }
-        if (this.conn) {
-          this.conn.binaryType = "arraybuffer";
-          this.conn.onopen = () => this._onConnOpen();
-          this.conn.onerror = (error) => this._onConnError(error);
-          this.conn.onmessage = (event) => this._onConnMessage(event);
-          this.conn.onclose = (event) => this._onConnClose(event);
+        if (NATIVE_WEBSOCKET_AVAILABLE) {
+          this.conn = new WebSocket(this._endPointURL());
+          this.setupConnection();
+          return;
         }
+        this.conn = new WSWebSocketDummy(this._endPointURL(), void 0, {
+          close: () => {
+            this.conn = null;
+          }
+        });
+        Promise.resolve().then(() => __toESM(require_browser())).then(({ default: WS }) => {
+          this.conn = new WS(this._endPointURL(), void 0, {
+            headers: this.headers
+          });
+          this.setupConnection();
+        });
       }
       /**
        * Disconnects the socket.
@@ -3713,6 +3726,20 @@ var init_RealtimeClient = __esm({
         this.channels = this.channels.filter((c2) => c2._joinRef() !== channel._joinRef());
       }
       /**
+       * Sets up connection handlers.
+       *
+       * @internal
+       */
+      setupConnection() {
+        if (this.conn) {
+          this.conn.binaryType = "arraybuffer";
+          this.conn.onopen = () => this._onConnOpen();
+          this.conn.onerror = (error) => this._onConnError(error);
+          this.conn.onmessage = (event) => this._onConnMessage(event);
+          this.conn.onclose = (event) => this._onConnClose(event);
+        }
+      }
+      /**
        * Returns the URL of the websocket.
        *
        * @internal
@@ -3795,6 +3822,25 @@ var init_RealtimeClient = __esm({
           ref: this.pendingHeartbeatRef
         });
         this.setAuth(this.accessToken);
+      }
+    };
+    WSWebSocketDummy = class {
+      constructor(address, _protocols, options2) {
+        this.binaryType = "arraybuffer";
+        this.onclose = () => {
+        };
+        this.onerror = () => {
+        };
+        this.onmessage = () => {
+        };
+        this.onopen = () => {
+        };
+        this.readyState = SOCKET_STATES.connecting;
+        this.send = () => {
+        };
+        this.url = null;
+        this.url = address;
+        this.close = options2.close;
       }
     };
   }
@@ -4694,7 +4740,7 @@ var init_module4 = __esm({
 var version4;
 var init_version4 = __esm({
   "node_modules/@supabase/supabase-js/dist/module/lib/version.js"() {
-    version4 = "2.39.0";
+    version4 = "2.39.2";
   }
 });
 
@@ -5193,6 +5239,13 @@ function _sessionResponse(data) {
   const user = (_a = data.user) !== null && _a !== void 0 ? _a : data;
   return { data: { session, user }, error: null };
 }
+function _sessionResponsePassword(data) {
+  const response = _sessionResponse(data);
+  if (!response.error && data.weak_password && typeof data.weak_password === "object" && Array.isArray(data.weak_password.reasons) && data.weak_password.reasons.length && data.weak_password.message && typeof data.weak_password.message === "string" && data.weak_password.reasons.reduce((a, i) => a && typeof i === "string", true)) {
+    response.data.weak_password = data.weak_password;
+  }
+  return response;
+}
 function _userResponse(data) {
   var _a;
   const user = (_a = data.user) !== null && _a !== void 0 ? _a : data;
@@ -5521,7 +5574,7 @@ var init_GoTrueAdminApi = __esm({
 var version5;
 var init_version5 = __esm({
   "node_modules/@supabase/gotrue-js/dist/module/lib/version.js"() {
-    version5 = "2.60.1";
+    version5 = "2.62.0";
   }
 });
 
@@ -5603,7 +5656,59 @@ var init_polyfills = __esm({
 });
 
 // node_modules/@supabase/gotrue-js/dist/module/lib/locks.js
-var internals, LockAcquireTimeoutError;
+async function navigatorLock(name, acquireTimeout, fn) {
+  if (internals.debug) {
+    console.log("@supabase/gotrue-js: navigatorLock: acquire lock", name, acquireTimeout);
+  }
+  const abortController = new globalThis.AbortController();
+  if (acquireTimeout > 0) {
+    setTimeout(() => {
+      abortController.abort();
+      if (internals.debug) {
+        console.log("@supabase/gotrue-js: navigatorLock acquire timed out", name);
+      }
+    }, acquireTimeout);
+  }
+  return await globalThis.navigator.locks.request(name, acquireTimeout === 0 ? {
+    mode: "exclusive",
+    ifAvailable: true
+  } : {
+    mode: "exclusive",
+    signal: abortController.signal
+  }, async (lock) => {
+    if (lock) {
+      if (internals.debug) {
+        console.log("@supabase/gotrue-js: navigatorLock: acquired", name, lock.name);
+      }
+      try {
+        return await fn();
+      } finally {
+        if (internals.debug) {
+          console.log("@supabase/gotrue-js: navigatorLock: released", name, lock.name);
+        }
+      }
+    } else {
+      if (acquireTimeout === 0) {
+        if (internals.debug) {
+          console.log("@supabase/gotrue-js: navigatorLock: not immediately available", name);
+        }
+        throw new NavigatorLockAcquireTimeoutError(`Acquiring an exclusive Navigator LockManager lock "${name}" immediately failed`);
+      } else {
+        if (internals.debug) {
+          try {
+            const result = await globalThis.navigator.locks.query();
+            console.log("@supabase/gotrue-js: Navigator LockManager state", JSON.stringify(result, null, "  "));
+          } catch (e3) {
+            console.warn("@supabase/gotrue-js: Error when querying Navigator LockManager state", e3);
+          }
+        }
+        console.warn("@supabase/gotrue-js: Navigator LockManager returned a null lock when using #request without ifAvailable set to true, it appears this browser is not following the LockManager spec https://developer.mozilla.org/en-US/docs/Web/API/LockManager/request");
+        return await fn();
+      }
+    }
+  });
+}
+var internals, LockAcquireTimeoutError, NavigatorLockAcquireTimeoutError;
 var init_locks = __esm({
   "node_modules/@supabase/gotrue-js/dist/module/lib/locks.js"() {
     init_helpers3();
@@ -5618,6 +5723,8 @@ var init_locks = __esm({
         super(message);
         this.isAcquireTimeout = true;
       }
+    };
+    NavigatorLockAcquireTimeoutError = class extends LockAcquireTimeoutError {
     };
   }
 });
@@ -5656,7 +5763,7 @@ var init_GoTrueClient = __esm({
        * Create a new client for use in the browser.
        */
       constructor(options2) {
-        var _a;
+        var _a, _b;
         this.memoryStorage = null;
         this.stateChangeEmitters = /* @__PURE__ */ new Map();
         this.autoRefreshTicker = null;
@@ -5692,6 +5799,13 @@ var init_GoTrueClient = __esm({
         this.lock = settings.lock || lockNoOp;
         this.detectSessionInUrl = settings.detectSessionInUrl;
         this.flowType = settings.flowType;
+        if (settings.lock) {
+          this.lock = settings.lock;
+        } else if (isBrowser() && ((_a = globalThis === null || globalThis === void 0 ? void 0 : globalThis.navigator) === null || _a === void 0 ? void 0 : _a.locks)) {
+          this.lock = navigatorLock;
+        } else {
+          this.lock = lockNoOp;
+        }
         this.mfa = {
           verify: this._verify.bind(this),
           enroll: this._enroll.bind(this),
@@ -5722,7 +5836,7 @@ var init_GoTrueClient = __esm({
           } catch (e3) {
             console.error("Failed to create a new BroadcastChannel, multi-tab state changes will not be available", e3);
           }
-          (_a = this.broadcastChannel) === null || _a === void 0 ? void 0 : _a.addEventListener("message", async (event) => {
+          (_b = this.broadcastChannel) === null || _b === void 0 ? void 0 : _b.addEventListener("message", async (event) => {
             this._debug("received broadcast notification from other tab or client", event);
             await this._notifyAllSubscribers(event.data.event, event.data.session, false);
           });
@@ -5890,7 +6004,7 @@ var init_GoTrueClient = __esm({
                 password,
                 gotrue_meta_security: { captcha_token: options2 === null || options2 === void 0 ? void 0 : options2.captchaToken }
               },
-              xform: _sessionResponse
+              xform: _sessionResponsePassword
             });
           } else if ("phone" in credentials) {
             const { phone, password, options: options2 } = credentials;
@@ -5901,7 +6015,7 @@ var init_GoTrueClient = __esm({
                 password,
                 gotrue_meta_security: { captcha_token: options2 === null || options2 === void 0 ? void 0 : options2.captchaToken }
               },
-              xform: _sessionResponse
+              xform: _sessionResponsePassword
             });
           } else {
             throw new AuthInvalidCredentialsError("You must provide either an email or phone number and a password");
@@ -5916,7 +6030,10 @@ var init_GoTrueClient = __esm({
             await this._saveSession(data.session);
             await this._notifyAllSubscribers("SIGNED_IN", data.session);
           }
-          return { data: { user: data.user, session: data.session }, error };
+          return {
+            data: Object.assign({ user: data.user, session: data.session }, data.weak_password ? { weakPassword: data.weak_password } : null),
+            error
+          };
         } catch (error) {
           if (isAuthError(error)) {
             return { data: { user: null, session: null }, error };
@@ -5948,7 +6065,8 @@ var init_GoTrueClient = __esm({
         });
       }
       async _exchangeCodeForSession(authCode) {
-        const [codeVerifier, redirectType] = (await getItemAsync(this.storage, `${this.storageKey}-code-verifier`)).split("/");
+        const storageItem = await getItemAsync(this.storage, `${this.storageKey}-code-verifier`);
+        const [codeVerifier, redirectType] = (storageItem !== null && storageItem !== void 0 ? storageItem : "").split("/");
         const { data, error } = await _request(this.fetch, "POST", `${this.url}/token?grant_type=pkce`, {
           headers: this.headers,
           body: {
@@ -7370,6 +7488,20 @@ var init_GoTrueClient = __esm({
   }
 });
 
+// node_modules/@supabase/gotrue-js/dist/module/AuthAdminApi.js
+var init_AuthAdminApi = __esm({
+  "node_modules/@supabase/gotrue-js/dist/module/AuthAdminApi.js"() {
+    init_GoTrueAdminApi();
+  }
+});
+
+// node_modules/@supabase/gotrue-js/dist/module/AuthClient.js
+var init_AuthClient = __esm({
+  "node_modules/@supabase/gotrue-js/dist/module/AuthClient.js"() {
+    init_GoTrueClient();
+  }
+});
+
 // node_modules/@supabase/gotrue-js/dist/module/lib/types.js
 var init_types3 = __esm({
   "node_modules/@supabase/gotrue-js/dist/module/lib/types.js"() {
@@ -7381,6 +7513,8 @@ var init_module5 = __esm({
   "node_modules/@supabase/gotrue-js/dist/module/index.js"() {
     init_GoTrueAdminApi();
     init_GoTrueClient();
+    init_AuthAdminApi();
+    init_AuthClient();
     init_types3();
     init_errors3();
     init_locks();
@@ -7469,6 +7603,15 @@ var init_SupabaseClient = __esm({
         var _a, _b, _c, _d, _e, _f, _g, _h;
         this.supabaseUrl = supabaseUrl;
         this.supabaseKey = supabaseKey;
+        this.from = (relation) => {
+          return this.rest.from(relation);
+        };
+        this.schema = (schema) => {
+          return this.rest.schema(schema);
+        };
+        this.rpc = (fn, args = {}, options3) => {
+          return this.rest.rpc(fn, args, options3);
+        };
         if (!supabaseUrl)
           throw new Error("supabaseUrl is required.");
         if (!supabaseKey)
@@ -7512,49 +7655,6 @@ var init_SupabaseClient = __esm({
        */
       get storage() {
         return new StorageClient(this.storageUrl, this.headers, this.fetch);
-      }
-      /**
-       * Perform a query on a table or a view.
-       *
-       * @param relation - The table or view name to query
-       */
-      from(relation) {
-        return this.rest.from(relation);
-      }
-      /**
-       * Perform a query on a schema distinct from the default schema supplied via
-       * the `options.db.schema` constructor parameter.
-       *
-       * The schema needs to be on the list of exposed schemas inside Supabase.
-       *
-       * @param schema - The name of the schema to query
-       */
-      schema(schema) {
-        return this.rest.schema(schema);
-      }
-      /**
-       * Perform a function call.
-       *
-       * @param fn - The function name to call
-       * @param args - The arguments to pass to the function call
-       * @param options - Named parameters
-       * @param options.head - When set to `true`, `data` will not be returned.
-       * Useful if you only need the count.
-       * @param options.count - Count algorithm to use to count rows returned by the
-       * function. Only applicable for [set-returning
-       * functions](https://www.postgresql.org/docs/current/functions-srf.html).
-       *
-       * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
-       * hood.
-       *
-       * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
-       * statistics under the hood.
-       *
-       * `"estimated"`: Uses exact count for low numbers and planned count for high
-       * numbers.
-       */
-      rpc(fn, args = {}, options2) {
-        return this.rest.rpc(fn, args, options2);
       }
       /**
        * Creates a Realtime channel with Broadcast, Presence, and Postgres Changes.
@@ -8720,8 +8820,8 @@ var init__ = __esm({
     component = async () => component_cache ??= (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default;
     universal_id = "src/routes/+layout.js";
     server_id = "src/routes/+layout.server.js";
-    imports = ["_app/immutable/nodes/0.WuTeJky4.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.7SQg30Qy.js", "_app/immutable/chunks/singletons.9N6_zH0C.js"];
-    stylesheets = ["_app/immutable/assets/0.waKLC7OJ.css"];
+    imports = ["_app/immutable/nodes/0.0hwJ3DfF.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.SN9JiIU2.js", "_app/immutable/chunks/singletons.LncmGzsy.js"];
+    stylesheets = ["_app/immutable/assets/0._noe5G0P.css"];
     fonts = [];
   }
 });
@@ -8788,14 +8888,14 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ??= (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    imports2 = ["_app/immutable/nodes/1.4mc87IKu.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/stores.OEI-CYtK.js", "_app/immutable/chunks/singletons.9N6_zH0C.js"];
+    imports2 = ["_app/immutable/nodes/1.BL5JsW5C.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/stores.gHk8zwD8.js", "_app/immutable/chunks/singletons.LncmGzsy.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
 });
 
 // .svelte-kit/output/server/chunks/button.js
-var currentUserSessions, currentPointingSession, currentUserProfile, Button;
+var currentUserSessions, currentPointingSession, currentUserProfile, defaultClasses, Button;
 var init_button = __esm({
   ".svelte-kit/output/server/chunks/button.js"() {
     init_index2();
@@ -8803,11 +8903,22 @@ var init_button = __esm({
     currentUserSessions = writable([]);
     currentPointingSession = writable({});
     currentUserProfile = writable({});
+    defaultClasses = "bg-transparent border border-solid border-dim-orange hover:bg-dim-orange text-foreground font-bold m-2 py-2 px-4 rounded active:bg-orange ease-linear transition-all duration-150";
     Button = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      let $$restProps = compute_rest_props($$props, ["classes"]);
-      let { classes = "bg-transparent border border-solid border-dim-orange hover:bg-dim-orange text-foreground font-bold m-2 py-2 px-4 rounded active:bg-orange ease-linear transition-all duration-150" } = $$props;
+      let $$restProps = compute_rest_props($$props, ["classes", "selected"]);
+      let { classes = "" } = $$props;
+      let { selected = false } = $$props;
       if ($$props.classes === void 0 && $$bindings.classes && classes !== void 0)
         $$bindings.classes(classes);
+      if ($$props.selected === void 0 && $$bindings.selected && selected !== void 0)
+        $$bindings.selected(selected);
+      {
+        if (selected) {
+          classes = "border border-solid border-dim-orange hover:bg-dim-orange text-foreground font-bold m-2 py-2 px-4 rounded bg-orange ease-linear transition-all duration-150";
+        } else {
+          classes = defaultClasses;
+        }
+      }
       return `<button${spread([{ class: escape_attribute_value(classes) }, escape_object($$restProps)], {})}>${slots.default ? slots.default({}) : ``}</button>`;
     });
   }
@@ -8878,7 +8989,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ??= (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    imports3 = ["_app/immutable/nodes/2.Ft6a7dgN.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.0PSLqRbv.js", "_app/immutable/chunks/singletons.9N6_zH0C.js", "_app/immutable/chunks/navigation.7SQg30Qy.js"];
+    imports3 = ["_app/immutable/nodes/2.FGAD8nlu.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.BW02HZU7.js", "_app/immutable/chunks/singletons.LncmGzsy.js", "_app/immutable/chunks/navigation.SN9JiIU2.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -8923,7 +9034,7 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ??= (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default;
-    imports4 = ["_app/immutable/nodes/3.Z1gVMzTE.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.7SQg30Qy.js", "_app/immutable/chunks/singletons.9N6_zH0C.js", "_app/immutable/chunks/stores.OEI-CYtK.js"];
+    imports4 = ["_app/immutable/nodes/3.MrZKolB6.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.SN9JiIU2.js", "_app/immutable/chunks/singletons.LncmGzsy.js", "_app/immutable/chunks/stores.gHk8zwD8.js"];
     stylesheets4 = [];
     fonts4 = [];
   }
@@ -8952,14 +9063,30 @@ var page_svelte_exports3 = {};
 __export(page_svelte_exports3, {
   default: () => Page3
 });
-function currentTimestamp() {
-  return (/* @__PURE__ */ new Date()).toISOString();
+function client_method(key2) {
+  {
+    if (key2 === "before_navigate" || key2 === "after_navigate" || key2 === "on_navigate" || key2 === "push_state" || key2 === "replace_state") {
+      return () => {
+      };
+    } else {
+      const name_lookup = {
+        disable_scroll_handling: "disableScrollHandling",
+        preload_data: "preloadData",
+        preload_code: "preloadCode",
+        invalidate_all: "invalidateAll"
+      };
+      return () => {
+        throw new Error(`Cannot call ${name_lookup[key2] ?? key2}(...) on the server`);
+      };
+    }
+  }
 }
-var Page3;
+var goto, Page3;
 var init_page_svelte3 = __esm({
   ".svelte-kit/output/server/entries/pages/points/_slug_/_page.svelte.js"() {
     init_ssr();
     init_button();
+    goto = /* @__PURE__ */ client_method("goto");
     Page3 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let $currentPointingSession, $$unsubscribe_currentPointingSession;
       let $currentUserProfile, $$unsubscribe_currentUserProfile;
@@ -8967,10 +9094,10 @@ var init_page_svelte3 = __esm({
       $$unsubscribe_currentUserProfile = subscribe(currentUserProfile, (value) => $currentUserProfile = value);
       let { data } = $$props;
       let { supabase, session } = data;
-      let realtimeChannel;
       let possibleNumbers = [];
       const numberSelections = ["Fibonacci"];
       let _numberSelection = numberSelections[0];
+      let currentVote;
       async function syncPointingSession(session2) {
         if (session2.new.last_updated > $currentPointingSession.last_updated) {
           console.debug("syncPointingSession", session2);
@@ -8978,15 +9105,13 @@ var init_page_svelte3 = __esm({
         }
       }
       async function syncGameState() {
-        console.log("syncing game state", $currentPointingSession);
         await supabase.from("PointingSession").update({
-          // users: $currentPointingSession.users,
           game_state: $currentPointingSession.game_state,
-          last_updated: currentTimestamp()
+          last_updated: $currentPointingSession.last_updated
         }).eq("id", $currentPointingSession.id).select().single().then((updatedSession) => {
           if (updatedSession.data) {
             currentPointingSession.set(updatedSession.data);
-            console.log("updated game state", updatedSession);
+            console.log("synced game state", updatedSession);
           }
           if (updatedSession.error) {
             console.error("error updating game state", updatedSession.error);
@@ -8995,7 +9120,6 @@ var init_page_svelte3 = __esm({
       }
       async function loadData() {
         await supabase.from("profiles").select("*").eq("id", session.user.id).limit(1).single().then((profile) => {
-          console.log("profile", profile);
           if (profile?.data) {
             currentUserProfile.set(profile.data);
           } else {
@@ -9003,9 +9127,9 @@ var init_page_svelte3 = __esm({
           }
         });
         await supabase.from("PointingSession").select("*").eq("id", data.slug).single().then((pointingSession) => {
-          console.log("Got pointing session", pointingSession, currentPointingSession);
+          console.log("Got the pointing session", pointingSession);
           if (pointingSession.data) {
-            realtimeChannel = supabase.channel(`${data.slug}-${session.user.id}`).on(
+            supabase.channel(`${data.slug}`).on(
               "postgres_changes",
               {
                 event: "UPDATE",
@@ -9015,15 +9139,24 @@ var init_page_svelte3 = __esm({
               },
               (payload) => syncPointingSession(payload)
             ).subscribe();
-            console.log("subscribing to reatltime updates", pointingSession.data.id, realtimeChannel);
-            console.log("adding player to session", session.user.id);
-            pointingSession.data.game_state.activePlayers[session.user.id] = {
-              id: session.user.id,
-              displayName: $currentUserProfile.display_name,
-              currentVote: ""
-            };
+            if (Object.hasOwn(pointingSession.data.game_state.activePlayers, session.user.id)) {
+              console.log("syncing display name");
+              pointingSession.data.game_state.activePlayers[session.user.id] = {
+                ...pointingSession.data.game_state.activePlayers[session.user.id],
+                displayName: $currentUserProfile.display_name
+                // sync display name (incase user changed it!)
+              };
+            } else {
+              pointingSession.data.game_state.activePlayers[session.user.id] = {
+                currentVote: "",
+                id: session.user.id,
+                displayName: $currentUserProfile.display_name
+              };
+            }
             currentPointingSession.set(pointingSession.data);
             syncGameState();
+          } else {
+            goto("/");
           }
         });
       }
@@ -9042,7 +9175,7 @@ var init_page_svelte3 = __esm({
         }
       }
       {
-        {
+        if (_numberSelection) {
           const numbersData = {
             Fibonacci: {
               name: "Fibonacci",
@@ -9055,13 +9188,29 @@ var init_page_svelte3 = __esm({
       $$unsubscribe_currentPointingSession();
       $$unsubscribe_currentUserProfile();
       return `<div class="text-yellow-100 p-8 h-full flex flex-col justify-center items-center">${$currentPointingSession && session ? `<div class="grid grid-cols-3"><div><h1 class="text-3xl font-bold p-3"><h1><h3 class="font-bold text-2xl mb-2" data-svelte-h="svelte-1vfpxjc">Player Votes</h3> <ol>${each(activePlayers, (player) => {
-        return `${player.id === session.user.id ? `<li class="text-lg font-bold text-lime-300">${escape(player.displayName)}: ${escape(player.currentVote)}</li>` : `<li class="text-lg">${escape(player.displayName)}: ${escape(player.currentVote)}</li>`}`;
-      })}</ol></h1></h1></div> <div> ${each(possibleNumbers, (number) => {
+        return `${player.id === session.user.id ? `<li class="text-lg font-bold text-lime-300">${escape(player.displayName)}: ${escape(player.currentVote)} </li>` : `<li class="text-lg">${escape(player.displayName)}: ${escape(player.currentVote)}</li>`}`;
+      })}</ol></h1></h1></div> <div>Select your pointing system:
+				<ul>${each(numberSelections, (selection) => {
+        return `<li>${validate_component(Button, "Button").$$render(
+          $$result,
+          {
+            "aria-current": _numberSelection === selection,
+            "aria-label": selection
+          },
+          {},
+          {
+            default: () => {
+              return `${escape(selection)}`;
+            }
+          }
+        )} </li>`;
+      })}</ul> ${each(possibleNumbers, (number) => {
         return `${validate_component(Button, "Button").$$render(
           $$result,
           {
-            "aria-current": _numberSelection === number,
-            "aria-label": number
+            "aria-current": currentVote === number,
+            "aria-label": number,
+            selected: currentVote === number
           },
           {},
           {
@@ -9070,7 +9219,11 @@ var init_page_svelte3 = __esm({
             }
           }
         )}`;
-      })}</div> <div></div></div>` : ``}</div>`;
+      })}</div> <div>${validate_component(Button, "Button").$$render($$result, {}, {}, {
+        default: () => {
+          return `Clear Votes`;
+        }
+      })}</div></div>` : ``}</div>`;
     });
   }
 });
@@ -9093,7 +9246,7 @@ var init__5 = __esm({
     index5 = 4;
     component5 = async () => component_cache5 ??= (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default;
     universal_id2 = "src/routes/points/[slug]/+page.js";
-    imports5 = ["_app/immutable/nodes/4.d5bldIGM.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.0PSLqRbv.js", "_app/immutable/chunks/singletons.9N6_zH0C.js", "_app/immutable/chunks/navigation.7SQg30Qy.js"];
+    imports5 = ["_app/immutable/nodes/4.rUqYEp-x.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.BW02HZU7.js", "_app/immutable/chunks/singletons.LncmGzsy.js", "_app/immutable/chunks/navigation.SN9JiIU2.js"];
     stylesheets5 = [];
     fonts5 = [];
   }
@@ -9134,7 +9287,7 @@ var init__6 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     index6 = 5;
     component6 = async () => component_cache6 ??= (await Promise.resolve().then(() => (init_page_svelte4(), page_svelte_exports4))).default;
-    imports6 = ["_app/immutable/nodes/5.an3DBB10.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.7SQg30Qy.js", "_app/immutable/chunks/singletons.9N6_zH0C.js"];
+    imports6 = ["_app/immutable/nodes/5.RQGbTfW4.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.SN9JiIU2.js", "_app/immutable/chunks/singletons.LncmGzsy.js"];
     stylesheets6 = [];
     fonts6 = [];
   }
@@ -9184,7 +9337,7 @@ function set_safe_public_env(environment) {
 }
 function afterUpdate() {
 }
-var building = false;
+var prerendering = false;
 var Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { stores } = $$props;
   let { page: page2 } = $$props;
@@ -9344,7 +9497,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1gdcndm"
+  version_hash: "1dj57iq"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -10641,7 +10794,7 @@ var replacements = {
   "\u2029": "\\u2029"
 };
 var pattern = new RegExp(`[${Object.keys(replacements).join("")}]`, "g");
-function serialize_data(fetched, filter, prerendering = false) {
+function serialize_data(fetched, filter, prerendering2 = false) {
   const headers2 = {};
   let cache_control = null;
   let age = null;
@@ -10682,7 +10835,7 @@ function serialize_data(fetched, filter, prerendering = false) {
     }
     attrs.push(`data-hash="${hash(...values)}"`);
   }
-  if (!prerendering && fetched.method === "GET" && cache_control && !varyAny) {
+  if (!prerendering2 && fetched.method === "GET" && cache_control && !varyAny) {
     const match = /s-maxage=(\d+)/g.exec(cache_control) ?? /max-age=(\d+)/g.exec(cache_control);
     if (match) {
       const ttl = +match[1] - +(age ?? "0");
@@ -11480,7 +11633,7 @@ async function respond_with_error({
       state,
       page_config: {
         ssr,
-        csr: get_option([default_layout], "csr") ?? true
+        csr
       },
       status,
       error: await handle_error_and_jsonify(event, options2, error),
@@ -11746,7 +11899,7 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
         status = action_result.status;
       }
     }
-    const should_prerender_data = nodes.some((node) => node?.server);
+    const should_prerender_data = nodes.some((node) => node?.server?.load);
     const data_pathname = add_data_suffix(event.url.pathname);
     const should_prerender = get_option(nodes, "prerender") ?? false;
     if (should_prerender) {
@@ -11761,7 +11914,7 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
     }
     state.prerender_default = should_prerender;
     const fetched = [];
-    if (get_option(nodes, "ssr") === false && !state.prerendering) {
+    if (get_option(nodes, "ssr") === false && !(state.prerendering && should_prerender_data)) {
       return await render_response({
         branch: [],
         fetched,
@@ -11919,6 +12072,7 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
         body: data
       });
     }
+    const ssr = get_option(nodes, "ssr") ?? true;
     return await render_response({
       event,
       options: options2,
@@ -11927,11 +12081,11 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
       resolve_opts,
       page_config: {
         csr: get_option(nodes, "csr") ?? true,
-        ssr: get_option(nodes, "ssr") ?? true
+        ssr
       },
       status,
       error: null,
-      branch: compact(branch),
+      branch: ssr === false ? [] : compact(branch),
       action_result,
       fetched
     });
@@ -12690,8 +12844,12 @@ var Server = class {
     };
     const private_env = filter_private_env(env, prefixes);
     const public_env2 = filter_public_env(env, prefixes);
-    set_private_env(building ? new Proxy({ type: "private" }, prerender_env_handler) : private_env);
-    set_public_env(building ? new Proxy({ type: "public" }, prerender_env_handler) : public_env2);
+    set_private_env(
+      prerendering ? new Proxy({ type: "private" }, prerender_env_handler) : private_env
+    );
+    set_public_env(
+      prerendering ? new Proxy({ type: "public" }, prerender_env_handler) : public_env2
+    );
     set_safe_public_env(public_env2);
     if (!this.#options.hooks) {
       try {
@@ -12733,7 +12891,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set(["favicon.png"]),
     mimeTypes: { ".png": "image/png" },
     _: {
-      client: { "start": "_app/immutable/entry/start.cWv3qOcI.js", "app": "_app/immutable/entry/app.jDcxcpsD.js", "imports": ["_app/immutable/entry/start.cWv3qOcI.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/singletons.9N6_zH0C.js", "_app/immutable/entry/app.jDcxcpsD.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
+      client: { "start": "_app/immutable/entry/start.UemONUoQ.js", "app": "_app/immutable/entry/app.0ExJy5Z1.js", "imports": ["_app/immutable/entry/start.UemONUoQ.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/singletons.LncmGzsy.js", "_app/immutable/entry/app.0ExJy5Z1.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
