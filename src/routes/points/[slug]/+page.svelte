@@ -205,6 +205,7 @@
 							<Button
 								aria-current={_numberSelection === selection}
 								aria-label={selection}
+								selected={selection === _numberSelection}
 								on:click={() => (_numberSelection = selection)}>{selection}</Button
 							>
 						</li>
@@ -225,3 +226,14 @@
 		</div>
 	{/if}
 </div>
+
+
+
+<!--
+Ideas for the future:
+- When all votes match, show a nice animation!
+- When clearing votes, show an erasing animation!
+- Different stats like mean, avg, mode, etc.
+-
+-
+-->
