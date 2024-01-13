@@ -169,8 +169,8 @@
 		if (!data.slug) {
 			goto('/');
 		}
-		console.log('sessions', session);
 		if (!session) {
+			console.log('not loggin in, session:', session);
 			goto(`/auth?next=${location}`);
 		}
 	});
@@ -186,11 +186,11 @@
 						<ol>
 							{#each activePlayers as player}
 								{#if player.id === session.user.id}
-									<li class="text-lg font-bold text-lime-300">
+									<li class="text-lg font-bold text-lime-300" data-test-id="user-{player.id}">
 										{player.displayName}: {player.currentVote}
 									</li>
 								{:else}
-									<li class="text-lg">{player.displayName}: {player.currentVote}</li>
+									<li class="text-lg" data-test-id="user-{player.id}">{player.displayName}: {player.currentVote}</li>
 								{/if}
 							{/each}
 						</ol>

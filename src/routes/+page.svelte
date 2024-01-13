@@ -20,12 +20,6 @@
 			version: 1,
 			activePlayers: {}
 		};
-		game_state[data.session.user.is] = {
-			// weird bug, cant use a var for a key?
-			id: data.session.user.id,
-			displayName: $currentUserProfile.display_name,
-			currentVote: ''
-		};
 		supabase
 			.from('PointingSession')
 			.insert({

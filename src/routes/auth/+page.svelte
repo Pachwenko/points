@@ -63,8 +63,8 @@
 		}
 		supabase.auth
 			.signInWithPassword({
-				email,
-				password
+				email: email,
+				password: password
 			})
 			.then((authResponse) => {
 				console.log(authResponse);
@@ -84,7 +84,7 @@
 </script>
 
 <div class="flex flex-grow h-full justify-center items-center">
-	<form on:submit={() => {}} class="container mx-auto p-6 rounded-lg w-full max-w-md">
+	<form on:submit={handleSignIn} class="container mx-auto p-6 rounded-lg w-full max-w-md">
 		<p class="text-2xl mb-5">
 			Welcome! This site is completely free to use, but you must sign up first!
 		</p>
