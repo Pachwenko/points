@@ -74,13 +74,13 @@
 </script>
 
 {#if data.session}
-	<div
-		class="p-8 min-h-full flex flex-col flex-grow justify-center items-center"
-	>
+	<div class="p-8 min-h-full flex flex-col flex-grow justify-center items-center">
 		<div class="container mx-auto p-2 text-center">
 			<h1 class="text-center text-3xl font-bold">Welcome to Pointing Poker</h1>
 			{#if $currentUserProfile}
-				<div>Display name: <p class="text-aqua font-bold">{$currentUserProfile.display_name}</p></div>
+				<div>
+					Display name: <p class="text-aqua font-bold">{$currentUserProfile.display_name}</p>
+				</div>
 			{:else}
 				<div>Display name: loading...</div>
 			{/if}
@@ -92,16 +92,15 @@
 					<h4 class="text-2xl font-bold">Previous Sessions:</h4>
 					<ul>
 						<li class="grid grid-cols-2">
-							<div>
-								Session ID
-							</div>
-							<div>
-								Last Used
-							</div>
+							<div>Session ID</div>
+							<div>Last Used</div>
 						</li>
 						{#each $currentUserSessions as session}
 							<li>
-								<a class="grid grid-cols-2 border border-1 rounded m-1 p-1" href="/points/{session.id}/">
+								<a
+									class="grid grid-cols-2 border border-1 rounded m-1 p-1"
+									href="/points/{session.id}/"
+								>
 									<div>
 										{session.id}
 									</div>

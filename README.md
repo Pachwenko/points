@@ -4,7 +4,6 @@ I'm using [svelte](https://svelte.dev/) here because it's really simple to use, 
 
 This project uses Node version 20.
 
-
 ## Developing
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
@@ -97,7 +96,6 @@ CREATE POLICY "Users can update their own profile" ON "public"."profiles"
     AS PERMISSIVE FOR UPDATE
     USING ( auth.uid() = id );
 ```
-
 
 # [Tailwind](https://tailwindcss.com/)
 

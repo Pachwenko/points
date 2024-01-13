@@ -76,7 +76,7 @@
 				<p class=" text-2xl text-center border border-2">{message}</p>
 			{/if}
 			<div class="mb-4">
-				<label for="display-name" class="block  mb-2">Display Name</label>
+				<label for="display-name" class="block mb-2">Display Name</label>
 				<input
 					id="display-name"
 					name="display_name"
@@ -86,7 +86,7 @@
 				/>
 			</div>
 			<div class="mb-4">
-				<label for="email" class="block  mb-2">Email</label>
+				<label for="email" class="block mb-2">Email</label>
 				<input
 					id="email"
 					name="email"
@@ -96,7 +96,7 @@
 				/>
 			</div>
 			<div class="mb-4">
-				<label for="password" class="block  mb-2">New Password</label>
+				<label for="password" class="block mb-2">New Password</label>
 				<input
 					id="password"
 					name="password"

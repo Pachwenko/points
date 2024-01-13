@@ -58,7 +58,7 @@
 
 	const handleSignIn = async () => {
 		if (!email || !password) {
-			errorMessage = 'Please enter your email and password to log in.'
+			errorMessage = 'Please enter your email and password to log in.';
 			return;
 		}
 		supabase.auth
@@ -139,7 +139,8 @@
 			>
 			<button
 				on:click={handleSignIn}
-				class="w-1/3 px-4 py-2 bg-green text-white rounded-lg hover:bg-dim-green" data-test-id="sign-in">Sign In</button
+				class="w-1/3 px-4 py-2 bg-green text-white rounded-lg hover:bg-dim-green"
+				data-test-id="sign-in">Sign In</button
 			>
 		</div>
 	</form>

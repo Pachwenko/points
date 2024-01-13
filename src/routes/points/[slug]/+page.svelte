@@ -122,7 +122,7 @@
 						.subscribe();
 
 					if (Object.hasOwn(pointingSession.data.game_state.activePlayers, session.user.id)) {
-						console.log('syncing display name')
+						console.log('syncing display name');
 						pointingSession.data.game_state.activePlayers[session.user.id] = {
 							...pointingSession.data.game_state.activePlayers[session.user.id],
 							displayName: $currentUserProfile.display_name // sync display name (incase user changed it!)
@@ -190,7 +190,9 @@
 										{player.displayName}: {player.currentVote}
 									</li>
 								{:else}
-									<li class="text-lg" data-test-id="user-{player.id}">{player.displayName}: {player.currentVote}</li>
+									<li class="text-lg" data-test-id="user-{player.id}">
+										{player.displayName}: {player.currentVote}
+									</li>
 								{/if}
 							{/each}
 						</ol>
@@ -226,8 +228,6 @@
 		</div>
 	{/if}
 </div>
-
-
 
 <!--
 Ideas for the future:
