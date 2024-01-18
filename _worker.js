@@ -8820,7 +8820,7 @@ var init__ = __esm({
     component = async () => component_cache ??= (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default;
     universal_id = "src/routes/+layout.js";
     server_id = "src/routes/+layout.server.js";
-    imports = ["_app/immutable/nodes/0.tfLXm6Vf.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.jKlczxhc.js", "_app/immutable/chunks/singletons.QsoIUSu5.js"];
+    imports = ["_app/immutable/nodes/0.llqa1JKR.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.YvH0BLeh.js", "_app/immutable/chunks/singletons.dQCvjkL2.js"];
     stylesheets = ["_app/immutable/assets/0.-sboOkQB.css"];
     fonts = [];
   }
@@ -8888,7 +8888,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ??= (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    imports2 = ["_app/immutable/nodes/1.jk47mVlr.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/stores.YiG883lK.js", "_app/immutable/chunks/singletons.QsoIUSu5.js"];
+    imports2 = ["_app/immutable/nodes/1.F_hFS7Rz.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/stores.3ggHobci.js", "_app/immutable/chunks/singletons.dQCvjkL2.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -8989,7 +8989,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ??= (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    imports3 = ["_app/immutable/nodes/2.fBWQtWmE.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.u8NE6mO_.js", "_app/immutable/chunks/singletons.QsoIUSu5.js", "_app/immutable/chunks/navigation.jKlczxhc.js"];
+    imports3 = ["_app/immutable/nodes/2.IQMqPaCe.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.TlDIyBNw.js", "_app/immutable/chunks/singletons.dQCvjkL2.js", "_app/immutable/chunks/navigation.YvH0BLeh.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -9034,7 +9034,7 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ??= (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default;
-    imports4 = ["_app/immutable/nodes/3.vuWdM73p.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.jKlczxhc.js", "_app/immutable/chunks/singletons.QsoIUSu5.js", "_app/immutable/chunks/stores.YiG883lK.js"];
+    imports4 = ["_app/immutable/nodes/3.oaAmCior.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.YvH0BLeh.js", "_app/immutable/chunks/singletons.dQCvjkL2.js", "_app/immutable/chunks/stores.3ggHobci.js"];
     stylesheets4 = [];
     fonts4 = [];
   }
@@ -9099,10 +9099,8 @@ var init_page_svelte3 = __esm({
       let _numberSelection = numberSelections[0];
       let currentVote;
       async function syncPointingSession(session2) {
-        if (session2.new.last_updated > $currentPointingSession.last_updated) {
-          console.debug("syncPointingSession", session2);
-          currentPointingSession.set(session2.new);
-        }
+        console.debug("syncPointingSession", session2);
+        currentPointingSession.set(session2.new);
       }
       async function syncGameState() {
         await supabase.from("PointingSession").update({
@@ -9247,7 +9245,7 @@ var init__5 = __esm({
     index5 = 4;
     component5 = async () => component_cache5 ??= (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default;
     universal_id2 = "src/routes/points/[slug]/+page.js";
-    imports5 = ["_app/immutable/nodes/4.k3qso5z4.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.u8NE6mO_.js", "_app/immutable/chunks/singletons.QsoIUSu5.js", "_app/immutable/chunks/navigation.jKlczxhc.js"];
+    imports5 = ["_app/immutable/nodes/4.jDI8BX15.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/button.TlDIyBNw.js", "_app/immutable/chunks/singletons.dQCvjkL2.js", "_app/immutable/chunks/navigation.YvH0BLeh.js"];
     stylesheets5 = [];
     fonts5 = [];
   }
@@ -9288,7 +9286,7 @@ var init__6 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     index6 = 5;
     component6 = async () => component_cache6 ??= (await Promise.resolve().then(() => (init_page_svelte4(), page_svelte_exports4))).default;
-    imports6 = ["_app/immutable/nodes/5.1aEbnbWW.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.jKlczxhc.js", "_app/immutable/chunks/singletons.QsoIUSu5.js"];
+    imports6 = ["_app/immutable/nodes/5.5dUX9GtA.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js", "_app/immutable/chunks/navigation.YvH0BLeh.js", "_app/immutable/chunks/singletons.dQCvjkL2.js"];
     stylesheets6 = [];
     fonts6 = [];
   }
@@ -9498,7 +9496,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "z41b6d"
+  version_hash: "mx3wq8"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -12892,7 +12890,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set(["favicon.png"]),
     mimeTypes: { ".png": "image/png" },
     _: {
-      client: { "start": "_app/immutable/entry/start.tljD8V97.js", "app": "_app/immutable/entry/app.sSreuPpB.js", "imports": ["_app/immutable/entry/start.tljD8V97.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/singletons.QsoIUSu5.js", "_app/immutable/entry/app.sSreuPpB.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
+      client: { "start": "_app/immutable/entry/start.h1NGfVNH.js", "app": "_app/immutable/entry/app.i4qzosCu.js", "imports": ["_app/immutable/entry/start.h1NGfVNH.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/singletons.dQCvjkL2.js", "_app/immutable/entry/app.i4qzosCu.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.li6Z87Pf.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
