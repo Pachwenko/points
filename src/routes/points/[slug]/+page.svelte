@@ -37,10 +37,10 @@
 	async function syncPointingSession(session) {
 		// when debugging, check network log for the websocket!
 		// called for realtime updateds to our pointing session
-		if (session.new.last_updated > $currentPointingSession.last_updated) {
-			console.debug('syncPointingSession', session);
-			currentPointingSession.set(session.new); // can access old state with "old"
-		}
+		// if (session.new.last_updated > $currentPointingSession.last_updated) {
+		console.debug('syncPointingSession', session);
+		currentPointingSession.set(session.new); // can access old state with "old"
+		// }
 	}
 
 	async function vote(number) {
