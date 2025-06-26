@@ -31,8 +31,7 @@
 	let realtimeChannel;
 
 	let possibleNumbers = [];
-	const numberSelections = ['Fibonacci'];
-	let _numberSelection = numberSelections[0];
+	const numberSelections = ['Fibonacci', 'T-Shirt Sizes'];
 	let currentVote;
 
 	let selectedUserId = null;
@@ -54,6 +53,38 @@
 
 	let showEmojiPicker = false;
 	let selectedEmoji = emojiOptions[0];
+
+	// Ensure game_state is always initialized
+	$: if ($currentPointingSession && !$currentPointingSession.game_state) {
+		$currentPointingSession.game_state = {};
+	}
+
+	// Ensure pointingSystem is initialized in game state
+	$: if ($currentPointingSession?.game_state && !$currentPointingSession.game_state.pointingSystem) {
+		$currentPointingSession.game_state.pointingSystem = numberSelections[0];
+		syncGameState();
+	}
+
+	function setPointingSystem(system) {
+		if (!$currentPointingSession?.game_state) return;
+		$currentPointingSession.game_state.pointingSystem = system;
+		$currentPointingSession.game_state.last_updated = currentTimestamp();
+		syncGameState();
+	}
+
+	$: if ($currentPointingSession?.game_state?.pointingSystem) {
+		const numbersData = {
+			Fibonacci: {
+				name: 'Fibonacci',
+				numbers: [1, 2, 3, 5, 8]
+			},
+			'T-Shirt Sizes': {
+				name: 'T-Shirt Sizes',
+				numbers: ['XS', 'S', 'M', 'L', 'XL']
+			}
+		};
+		possibleNumbers = numbersData[$currentPointingSession.game_state.pointingSystem]?.numbers || [];
+	}
 
 	function currentTimestamp() {
 		return new Date().toISOString();
@@ -85,6 +116,12 @@
 			player.currentVote = '';
 			return player;
 		});
+		$currentPointingSession.game_state.votesRevealed = false;
+		await syncGameState();
+	}
+
+	async function showVotes() {
+		$currentPointingSession.game_state.votesRevealed = true;
 		await syncGameState();
 	}
 
@@ -232,17 +269,6 @@
 		activePlayers = Object.values($currentPointingSession.game_state.activePlayers);
 	}
 
-	$: if (_numberSelection) {
-		// So we can add more options later and make it dynamic
-		const numbersData = {
-			Fibonacci: {
-				name: 'Fibonacci',
-				numbers: [1, 2, 3, 5, 8]
-			}
-		};
-		possibleNumbers = numbersData[_numberSelection].numbers;
-	}
-
 	function selectUser(userId) {
 		selectedUserId = userId;
 	}
@@ -372,17 +398,16 @@
 {#if data.session}
 	<div class="p-8 min-h-full flex flex-col flex-grow justify-center items-center">
 		<div class="container mx-auto p-2 text-center">
-			<h1 class="text-center text-3xl font-bold">Session: {data.slug}</h1>
 			{#if $currentUserProfile}
-				<div>
+				<!-- <div>
 					Display name: <p class="text-aqua font-bold">{$currentUserProfile.display_name}</p>
-				</div>
+				</div> -->
 			{:else}
 				<div>Display name: loading...</div>
 			{/if}
 
 			<div class="grid grid-cols-3">
-				<div>
+				<div class="flex flex-col items-start gap-2">
 					<h3 class="font-bold text-2xl mb-2">Player Votes</h3>
 					<PlayerList
 						players={activePlayers}
@@ -391,33 +416,37 @@
 						selectedEmoji={selectedEmoji}
 						playerRefs={playerRefs}
 						on:throw={(e) => throwEmoji(e.detail.emoji, e.detail.playerId)}
+						votesRevealed={$currentPointingSession?.game_state?.votesRevealed}
 					/>
 				</div>
 				<div>
-					Select your pointing system:
-					<ul>
-						{#each numberSelections as selection}
-							<li>
-								<Button
-									aria-current={_numberSelection === selection}
-									aria-label={selection}
-									selected={selection === _numberSelection}
-									on:click={() => (_numberSelection = selection)}>{selection}</Button
-								>
-							</li>
-						{/each}
-					</ul>
-					{#each possibleNumbers as number}
-						<Button
-							aria-current={currentVote === number}
-							aria-label={number}
-							selected={currentVote === number}
-							on:click={() => vote(number)}>{number}</Button
+					{#if $currentPointingSession?.game_state}
+						Select your pointing system:
+						<select
+							value={$currentPointingSession.game_state.pointingSystem}
+							on:change={(e) => setPointingSystem(e.target.value)}
+							class="mb-4 px-4 py-2 rounded border-4 border-[#fe8019] bg-[#282828] text-[#ebdbb2] font-bold focus:outline-none focus:ring-2 focus:ring-[#fe8019] transition-all duration-150"
 						>
-					{/each}
+							{#each numberSelections as selection}
+								<option value={selection}>{selection}</option>
+							{/each}
+						</select>
+						<div class="flex gap-3 mt-2">
+							{#each possibleNumbers as number}
+								<Button
+									aria-current={currentVote === number}
+									aria-label={number}
+									selected={currentVote === number}
+									on:click={() => vote(number)}
+									variant="number"
+								>{number}</Button>
+							{/each}
+						</div>
+					{/if}
 				</div>
-				<div>
-					<Button on:click={() => clearVotes()}>Clear Votes</Button>
+				<div class="flex flex-col gap-2 items-stretch ml-8">
+					<Button on:click={() => clearVotes()} variant="default">Clear Votes</Button>
+					<Button on:click={() => showVotes()} variant="default">Show Votes</Button>
 				</div>
 			</div>
 

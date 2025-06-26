@@ -23,7 +23,6 @@
 	<div class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-yellow-900 border-4 border-yellow-700 rounded-xl shadow-2xl p-6 flex flex-col items-center min-w-[320px] max-w-[90vw] z-50" on:click|stopPropagation style="background-color: #282828;">
 		<button class="absolute top-2 right-2 text-orange-300 hover:text-orange-100 text-2xl font-bold" on:click={close} title="Close" aria-label="Close">×</button>
 		<span class="mb-2 text-orange-200 font-bold text-lg">Pick your emoji!</span>
-		<div class="mb-2 text-orange-200">Pick from defaults:</div>
 		<div class="grid grid-cols-8 gap-2 max-w-xs">
 			{#each emojiOptions as emoji}
 				<button

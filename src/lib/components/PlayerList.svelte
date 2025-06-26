@@ -4,6 +4,7 @@
 	export let thrownEmojis: Record<string, string> = {};
 	export let selectedEmoji: string = '';
 	export let playerRefs: Record<string, HTMLElement | null> = {};
+	export let votesRevealed: boolean = false;
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
@@ -28,7 +29,12 @@
 				>
 					{player.displayName}
 				</button>
-				: <span class="text-aqua-200">{player.currentVote}</span>
+				: <span class="text-aqua-200">
+					{votesRevealed || player.id === sessionUserId ? player.currentVote || '—' : '—'}
+					{#if !votesRevealed && player.currentVote}
+						<span class="inline-block w-2 h-2 ml-2 rounded-full bg-lime-400 align-middle" title="Vote submitted"></span>
+					{/if}
+				</span>
 				{#if thrownEmojis[player.id]}
 					<span class="ml-2 animate-bounce text-2xl">{thrownEmojis[player.id]}</span>
 				{/if}
