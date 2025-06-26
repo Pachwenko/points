@@ -1,6 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 
 	export let data;
 	let { supabase } = data;
@@ -14,18 +15,25 @@
 	let email = '';
 	let password = '';
 
+	// Read the 'msg' query parameter from the URL
+	$: urlMsg = $page.url.searchParams.get('msg') || '';
+	$: message = urlMsg || message;
+
 	async function handleSaveChanges() {
+		let profileChanged = false;
 		if (displayName !== _displayName) {
 			if (!userData) {
 				// create new profile
 				const { error } = await supabase
 					.from('profiles')
 					.insert({ id: data.session?.user.id, display_name: displayName });
+				profileChanged = !error;
 			} else {
 				const { error } = await data.supabase
 					.from('profiles')
 					.update({ display_name: displayName })
 					.eq('id', data.session?.user.id);
+				profileChanged = !error;
 			}
 		}
 
@@ -35,6 +43,11 @@
 		if (email !== _email) {
 			const { error } = await supabase.auth.updateUser({ email: email });
 			message += 'Please go to your email and confirm the change.';
+		}
+
+		// If there was a msg in the URL, redirect to home after profile change
+		if (urlMsg && profileChanged) {
+			goto('/');
 		}
 	}
 

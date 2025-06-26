@@ -37,6 +37,46 @@
 			});
 	}
 
+	async function ensureUserProfile() {
+		const userId = data.session?.user.id;
+		console.log('Session:', data.session);
+		console.log('User ID:', userId);
+		if (!userId) {
+			console.error('No user ID found in session');
+			return;
+		}
+
+		// Try to fetch the profile
+		const { data: profile, error: fetchError } = await supabase
+			.from('profiles')
+			.select('*')
+			.eq('id', userId)
+			.single();
+
+		console.log('Profile fetch:', profile, fetchError);
+
+		if (profile) {
+			currentUserProfile.set(profile);
+			return;
+		}
+
+		// If not found, try to insert
+		const { data: newProfile, error: insertError } = await supabase
+			.from('profiles')
+			.insert([{ id: userId, display_name: 'default' }])
+			.select()
+			.single();
+
+		console.log('Profile insert:', newProfile, insertError);
+
+		if (newProfile) {
+			currentUserProfile.set(newProfile);
+		} else {
+			console.error('Profile creation error:', insertError);
+			currentUserProfile.set({ display_name: 'default', temporary: true, error: insertError?.message });
+		}
+	}
+
 	async function loadData() {
 		supabase
 			.from('PointingSession')
@@ -46,20 +86,9 @@
 			.then((sessions) => {
 				currentUserSessions.set(sessions.data);
 			});
-		supabase
-			.from('profiles')
-			.select('*')
-			.eq('id', data.session?.user.id)
-			.limit(1)
-			.single()
-			.then((profile) => {
-				console.log('profile', profile);
-				if (profile?.data) {
-					currentUserProfile.set(profile.data);
-				} else {
-					currentUserProfile.set({ display_name: 'default', temporary: true });
-				}
-			});
+
+		// Use the new ensureUserProfile function
+		await ensureUserProfile();
 	}
 
 	$: if (data.session) {
