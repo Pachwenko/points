@@ -3,12 +3,10 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 export default {
 	kit: {
-		adapter: adapter({
-			routes: {
-				include: ['/*'],
-				exclude: ['<all>']
-			}
-		})
+		adapter: adapter(),
+		prerender: {
+			entries: []
+		}
 	},
 	preprocess: vitePreprocess()
 };
