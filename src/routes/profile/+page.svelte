@@ -61,16 +61,20 @@
 			goto('/auth');
 		}
 		// should only ever return one (the current user's profile)
-		const { data: result } = await supabase
+		const { data: result, error } = await supabase
 			.from('profiles')
 			.select('*')
 			.eq('id', data.session?.user.id)
-			.limit(1)
-			.single();
+			.maybeSingle();
 		if (result) {
 			userData = result;
 			displayName = userData.display_name;
 			_displayName = displayName;
+		} else {
+			// No profile yet, allow user to create one
+			userData = null;
+			displayName = '';
+			_displayName = '';
 		}
 		const {
 			data: { user }

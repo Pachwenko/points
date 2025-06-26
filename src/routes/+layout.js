@@ -28,10 +28,12 @@ export const load = async ({ fetch, data, depends }) => {
 			.eq('id', session.user.id)
 			.single();
 
-		if (!profile || !profile.display_name) {
-			if (typeof window !== 'undefined') {
-				window.location.href = '/profile?msg=Please%20create%20your%20profile!';
-			}
+		if (
+			(!profile || !profile.display_name) &&
+			typeof window !== 'undefined' &&
+			!window.location.pathname.startsWith('/profile')
+		) {
+			window.location.href = '/profile?msg=Please%20create%20your%20profile!';
 		}
 	}
 
