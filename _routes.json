@@ -6,12 +6,6 @@
 	],
 	"exclude": [
 		"/_app/*",
-		"/favicon.png",
-		"/",
-		"/__data.json",
-		"/auth",
-		"/auth/__data.json",
-		"/profile",
-		"/profile/__data.json"
+		"/favicon.png"
 	]
 }

@@ -65,6 +65,13 @@ function compute_rest_props(props, keys) {
       rest[k] = props[k];
   return rest;
 }
+function set_store_value(store, ret, value) {
+  store.set(value);
+  return ret;
+}
+function custom_event(type, detail, { bubbles = false, cancelable = false } = {}) {
+  return new CustomEvent(type, { detail, bubbles, cancelable });
+}
 function set_current_component(component7) {
   current_component = component7;
 }
@@ -72,6 +79,25 @@ function get_current_component() {
   if (!current_component)
     throw new Error("Function called outside component initialization");
   return current_component;
+}
+function createEventDispatcher() {
+  const component7 = get_current_component();
+  return (type, detail, { cancelable = false } = {}) => {
+    const callbacks = component7.$$.callbacks[type];
+    if (callbacks) {
+      const event = custom_event(
+        /** @type {string} */
+        type,
+        detail,
+        { cancelable }
+      );
+      callbacks.slice().forEach((fn) => {
+        fn.call(component7, event);
+      });
+      return !event.defaultPrevented;
+    }
+    return true;
+  };
 }
 function setContext(key2, context) {
   get_current_component().$$.context.set(key2, context);
@@ -210,7 +236,7 @@ function create_ssr_component(fn) {
       return {
         html,
         css: {
-          code: Array.from(result.css).map((css) => css.code).join("\n"),
+          code: Array.from(result.css).map((css2) => css2.code).join("\n"),
           map: null
           // TODO
         },
@@ -9045,6 +9071,12 @@ var init_layout = __esm({
       const {
         data: { session }
       } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profile } = await supabase.from("profiles").select("*").eq("id", session.user.id).single();
+        if ((!profile || !profile.display_name) && typeof window !== "undefined" && !window.location.pathname.startsWith("/profile")) {
+          window.location.href = "/profile?msg=Please%20create%20your%20profile!";
+        }
+      }
       return { supabase, session };
     };
     prerender = "auto";
@@ -9108,20 +9140,16 @@ var init__ = __esm({
     component = async () => component_cache ??= (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default;
     universal_id = "src/routes/+layout.js";
     server_id = "src/routes/+layout.server.js";
-    imports = ["_app/immutable/nodes/0.5rergtgG.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.-CUx3Znz.js", "_app/immutable/chunks/navigation.hGAhkB_k.js", "_app/immutable/chunks/singletons.MaZw7zGC.js"];
-    stylesheets = ["_app/immutable/assets/0.-sboOkQB.css"];
+    imports = ["_app/immutable/nodes/0.7DLPkjup.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.wCkDe2Ta.js", "_app/immutable/chunks/index.LId1ysqj.js", "_app/immutable/chunks/navigation.sly37ktX.js", "_app/immutable/chunks/singletons.oEu8hZWU.js"];
+    stylesheets = ["_app/immutable/assets/0.rj9q9wTP.css"];
     fonts = [];
   }
 });
 
-// .svelte-kit/output/server/entries/fallbacks/error.svelte.js
-var error_svelte_exports = {};
-__export(error_svelte_exports, {
-  default: () => Error$1
-});
-var getStores, page, Error$1;
-var init_error_svelte = __esm({
-  ".svelte-kit/output/server/entries/fallbacks/error.svelte.js"() {
+// .svelte-kit/output/server/chunks/stores.js
+var getStores, page;
+var init_stores = __esm({
+  ".svelte-kit/output/server/chunks/stores.js"() {
     init_ssr();
     getStores = () => {
       const stores = getContext("__svelte__");
@@ -9144,7 +9172,20 @@ var init_error_svelte = __esm({
         return store.subscribe(fn);
       }
     };
-    Error$1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  }
+});
+
+// .svelte-kit/output/server/entries/fallbacks/error.svelte.js
+var error_svelte_exports = {};
+__export(error_svelte_exports, {
+  default: () => Error2
+});
+var Error2;
+var init_error_svelte = __esm({
+  ".svelte-kit/output/server/entries/fallbacks/error.svelte.js"() {
+    init_ssr();
+    init_stores();
+    Error2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let $page, $$unsubscribe_page;
       $$unsubscribe_page = subscribe(page, (value) => $page = value);
       $$unsubscribe_page();
@@ -9167,14 +9208,17 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index3 = 1;
     component2 = async () => component_cache2 ??= (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    imports2 = ["_app/immutable/nodes/1.mpHeHNir.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.-CUx3Znz.js", "_app/immutable/chunks/singletons.MaZw7zGC.js"];
+    imports2 = ["_app/immutable/nodes/1.7_oPWNaX.js", "_app/immutable/chunks/scheduler.wCkDe2Ta.js", "_app/immutable/chunks/index.LId1ysqj.js", "_app/immutable/chunks/stores.Mvdeo-Rc.js", "_app/immutable/chunks/singletons.oEu8hZWU.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
 });
 
 // .svelte-kit/output/server/chunks/button.js
-var currentUserSessions, currentPointingSession, currentUserProfile, defaultClasses, Button;
+function mergeClasses(defaults, custom) {
+  return [defaults, custom].filter(Boolean).join(" ");
+}
+var currentUserSessions, currentPointingSession, currentUserProfile, defaultBase, defaultSelected, numberBase, numberSelected, Button;
 var init_button = __esm({
   ".svelte-kit/output/server/chunks/button.js"() {
     init_index2();
@@ -9182,23 +9226,35 @@ var init_button = __esm({
     currentUserSessions = writable([]);
     currentPointingSession = writable({});
     currentUserProfile = writable({});
-    defaultClasses = "bg-transparent border border-solid border-dim-orange hover:bg-dim-orange text-foreground font-bold m-2 py-2 px-4 rounded active:bg-orange ease-linear transition-all duration-150";
+    defaultBase = "bg-[#3c3836] border-2 border-solid border-[#fe8019] hover:bg-[#504945] hover:text-[#fe8019] text-[#ebdbb2] font-bold py-2 px-5 rounded shadow-md active:bg-[#d65d0e] active:text-[#282828] transition-all duration-150";
+    defaultSelected = "border-2 border-solid border-[#fe8019] bg-[#fe8019] text-[#282828] font-bold py-2 px-5 rounded shadow-lg transition-all duration-150";
+    numberBase = "bg-[#282828] border-4 border-solid border-[#fe8019] hover:bg-[#fe8019] hover:text-[#282828] text-[#ebdbb2] font-bold py-2 px-5 rounded shadow-md active:bg-[#d65d0e] active:text-[#282828] transition-all duration-150";
+    numberSelected = "border-4 border-solid border-[#fe8019] bg-[#fe8019] text-[#282828] font-bold py-2 px-5 rounded shadow-lg transition-all duration-150";
     Button = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      let $$restProps = compute_rest_props($$props, ["classes", "selected"]);
+      let mergedClasses;
+      let $$restProps = compute_rest_props($$props, ["classes", "selected", "variant"]);
       let { classes = "" } = $$props;
       let { selected = false } = $$props;
+      let { variant = "default" } = $$props;
       if ($$props.classes === void 0 && $$bindings.classes && classes !== void 0)
         $$bindings.classes(classes);
       if ($$props.selected === void 0 && $$bindings.selected && selected !== void 0)
         $$bindings.selected(selected);
-      {
-        if (selected) {
-          classes = "border border-solid border-dim-orange hover:bg-dim-orange text-foreground font-bold m-2 py-2 px-4 rounded bg-orange ease-linear transition-all duration-150";
-        } else {
-          classes = defaultClasses;
-        }
-      }
-      return `<button${spread([{ class: escape_attribute_value(classes) }, escape_object($$restProps)], {})}>${slots.default ? slots.default({}) : ``}</button>`;
+      if ($$props.variant === void 0 && $$bindings.variant && variant !== void 0)
+        $$bindings.variant(variant);
+      mergedClasses = mergeClasses(
+        variant === "number" ? selected ? numberSelected : numberBase : selected ? defaultSelected : defaultBase,
+        classes
+      );
+      return `<button${spread(
+        [
+          {
+            class: escape_attribute_value(mergedClasses)
+          },
+          escape_object($$restProps)
+        ],
+        {}
+      )}>${slots.default ? slots.default({}) : ``}</button>`;
     });
   }
 });
@@ -9220,18 +9276,38 @@ var init_page_svelte = __esm({
       $$unsubscribe_currentUserSessions = subscribe(currentUserSessions, (value) => $currentUserSessions = value);
       let { data } = $$props;
       let { supabase } = data;
+      async function ensureUserProfile() {
+        const userId = data.session?.user.id;
+        console.log("Session:", data.session);
+        console.log("User ID:", userId);
+        if (!userId) {
+          console.error("No user ID found in session");
+          return;
+        }
+        const { data: profile, error: fetchError } = await supabase.from("profiles").select("*").eq("id", userId).single();
+        console.log("Profile fetch:", profile, fetchError);
+        if (profile) {
+          currentUserProfile.set(profile);
+          return;
+        }
+        const { data: newProfile, error: insertError } = await supabase.from("profiles").insert([{ id: userId, display_name: "default" }]).select().single();
+        console.log("Profile insert:", newProfile, insertError);
+        if (newProfile) {
+          currentUserProfile.set(newProfile);
+        } else {
+          console.error("Profile creation error:", insertError);
+          currentUserProfile.set({
+            display_name: "default",
+            temporary: true,
+            error: insertError?.message
+          });
+        }
+      }
       async function loadData() {
         supabase.from("PointingSession").select().contains("users", [data.session?.user.id]).order("last_updated", { ascending: false }).then((sessions) => {
           currentUserSessions.set(sessions.data);
         });
-        supabase.from("profiles").select("*").eq("id", data.session?.user.id).limit(1).single().then((profile) => {
-          console.log("profile", profile);
-          if (profile?.data) {
-            currentUserProfile.set(profile.data);
-          } else {
-            currentUserProfile.set({ display_name: "default", temporary: true });
-          }
-        });
+        await ensureUserProfile();
       }
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
@@ -9268,7 +9344,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index4 = 2;
     component3 = async () => component_cache3 ??= (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    imports3 = ["_app/immutable/nodes/2.5HRTqOm4.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.-CUx3Znz.js", "_app/immutable/chunks/button.-pU9ajbt.js", "_app/immutable/chunks/singletons.MaZw7zGC.js", "_app/immutable/chunks/navigation.hGAhkB_k.js"];
+    imports3 = ["_app/immutable/nodes/2.g9npJsp3.js", "_app/immutable/chunks/scheduler.wCkDe2Ta.js", "_app/immutable/chunks/index.LId1ysqj.js", "_app/immutable/chunks/button.kyY1xn4m.js", "_app/immutable/chunks/singletons.oEu8hZWU.js", "_app/immutable/chunks/navigation.sly37ktX.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -9285,12 +9361,11 @@ var init_page_svelte2 = __esm({
     init_ssr();
     Page2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let { data } = $$props;
-      let displayName = "";
       let email = "";
       let password = "";
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
-      return `  <div class="flex flex-grow h-full justify-center items-center"><form class="container mx-auto p-6 rounded-lg w-full max-w-md"><p class="text-2xl mb-5" data-svelte-h="svelte-ie8qrn">Welcome! This site is completely free to use, but you must sign up first!</p> ${``} <div class="mb-4"><label for="display-name" class="block mb-2" data-svelte-h="svelte-xvxr5t">Display Name</label> <input id="display-name" name="display-name" class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Display name"${add_attribute("value", displayName, 0)}></div> <div class="mb-4"><label for="email" class="block mb-2" data-svelte-h="svelte-5n7jdk">Email</label> <input required id="email" name="email" class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Email"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block mb-2" data-svelte-h="svelte-kmyewi">Password</label> <input required id="password" type="password" name="password" class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password"${add_attribute("value", password, 0)}></div> <div class="mb-4 flex justify-between"><button class="w-1/3 px-4 py-2 bg-aqua text-white rounded-lg hover:bg-dim-aqua" data-svelte-h="svelte-14ydwbg">Sign Up</button> <button class="w-1/3 px-4 py-2 bg-green text-white rounded-lg hover:bg-dim-green" data-test-id="sign-in" data-svelte-h="svelte-4dz2lt">Sign In</button></div></form></div>`;
+      return `  <div class="flex flex-grow h-full justify-center items-center"><form class="container mx-auto p-6 rounded-lg w-full max-w-md">${``} ${`<p class="text-2xl mb-5" data-svelte-h="svelte-s47t89">Welcome! This site is completely free to use, but you must sign up first!</p> <fieldset ${""} style="border:0;padding:0;margin:0;"><div class="mb-4"><label for="email" class="block mb-2" data-svelte-h="svelte-5n7jdk">Email</label> <input required id="email" name="email" class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Email"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block mb-2" data-svelte-h="svelte-kmyewi">Password</label> <input required type="password" id="password" name="password" class="w-full p-2 text-zinc-900 bg-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password"${add_attribute("value", password, 0)}></div> <div class="mb-4 flex justify-between"><button ${""} class="w-1/3 px-4 py-2 bg-aqua text-white rounded-lg hover:bg-dim-aqua">Sign Up</button> <button ${""} class="w-1/3 px-4 py-2 bg-green text-white rounded-lg hover:bg-dim-green" data-test-id="sign-in">Sign In</button></div></fieldset>`}</form></div>`;
     });
   }
 });
@@ -9309,7 +9384,7 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index5 = 3;
     component4 = async () => component_cache4 ??= (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default;
-    imports4 = ["_app/immutable/nodes/3.jz-0M_El.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.-CUx3Znz.js", "_app/immutable/chunks/navigation.hGAhkB_k.js", "_app/immutable/chunks/singletons.MaZw7zGC.js"];
+    imports4 = ["_app/immutable/nodes/3.Ps-9PpCx.js", "_app/immutable/chunks/scheduler.wCkDe2Ta.js", "_app/immutable/chunks/index.LId1ysqj.js", "_app/immutable/chunks/navigation.sly37ktX.js", "_app/immutable/chunks/singletons.oEu8hZWU.js"];
     stylesheets4 = [];
     fonts4 = [];
   }
@@ -9338,30 +9413,77 @@ var page_svelte_exports3 = {};
 __export(page_svelte_exports3, {
   default: () => Page3
 });
-function client_method(key2) {
-  {
-    if (key2 === "before_navigate" || key2 === "after_navigate" || key2 === "on_navigate" || key2 === "push_state" || key2 === "replace_state") {
-      return () => {
-      };
-    } else {
-      const name_lookup = {
-        disable_scroll_handling: "disableScrollHandling",
-        preload_data: "preloadData",
-        preload_code: "preloadCode",
-        invalidate_all: "invalidateAll"
-      };
-      return () => {
-        throw new Error(`Cannot call ${name_lookup[key2] ?? key2}(...) on the server`);
-      };
-    }
-  }
-}
-var goto, Page3;
+var EmojiPicker, PlayerList, css$1, EmojiThrower, css, EMOJI_FLY_X_OFFSET, EMOJI_FLY_Y_RANGE, EMOJI_FLY_DURATION, Page3;
 var init_page_svelte3 = __esm({
   ".svelte-kit/output/server/entries/pages/points/_slug_/_page.svelte.js"() {
     init_ssr();
     init_button();
-    goto = /* @__PURE__ */ client_method("goto");
+    EmojiPicker = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { show = false } = $$props;
+      let { emojiOptions = [] } = $$props;
+      let { selectedEmoji = "" } = $$props;
+      createEventDispatcher();
+      if ($$props.show === void 0 && $$bindings.show && show !== void 0)
+        $$bindings.show(show);
+      if ($$props.emojiOptions === void 0 && $$bindings.emojiOptions && emojiOptions !== void 0)
+        $$bindings.emojiOptions(emojiOptions);
+      if ($$props.selectedEmoji === void 0 && $$bindings.selectedEmoji && selectedEmoji !== void 0)
+        $$bindings.selectedEmoji(selectedEmoji);
+      return `${show ? `<button type="button" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50" aria-label="Close emoji picker" style="all:unset;position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);"></button> <div class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-yellow-900 border-4 border-yellow-700 rounded-xl shadow-2xl p-6 flex flex-col items-center min-w-[320px] max-w-[90vw] z-50" style="background-color: #282828;"><button class="absolute top-2 right-2 text-orange-300 hover:text-orange-100 text-2xl font-bold" title="Close" aria-label="Close" data-svelte-h="svelte-1o98il1">\xD7</button> <span class="mb-2 text-orange-200 font-bold text-lg" data-svelte-h="svelte-tn48hr">Pick your emoji!</span> <div class="grid grid-cols-8 gap-2 max-w-xs">${each(emojiOptions, (emoji) => {
+        return `<button type="button" class="text-2xl hover:scale-125 transition-transform duration-150 bg-yellow-800 hover:bg-yellow-700 rounded-full px-2 py-1 focus:outline-none focus:ring-2 focus:ring-orange-400"${add_attribute("title", `Pick ${emoji}`, 0)}${add_attribute("aria-label", `Pick ${emoji}`, 0)} tabindex="0">${escape(emoji)} </button>`;
+      })}</div></div>` : ``}`;
+    });
+    PlayerList = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { players = [] } = $$props;
+      let { sessionUserId = "" } = $$props;
+      let { thrownEmojis = {} } = $$props;
+      let { selectedEmoji = "" } = $$props;
+      let { playerRefs = {} } = $$props;
+      let { votesRevealed = false } = $$props;
+      createEventDispatcher();
+      if ($$props.players === void 0 && $$bindings.players && players !== void 0)
+        $$bindings.players(players);
+      if ($$props.sessionUserId === void 0 && $$bindings.sessionUserId && sessionUserId !== void 0)
+        $$bindings.sessionUserId(sessionUserId);
+      if ($$props.thrownEmojis === void 0 && $$bindings.thrownEmojis && thrownEmojis !== void 0)
+        $$bindings.thrownEmojis(thrownEmojis);
+      if ($$props.selectedEmoji === void 0 && $$bindings.selectedEmoji && selectedEmoji !== void 0)
+        $$bindings.selectedEmoji(selectedEmoji);
+      if ($$props.playerRefs === void 0 && $$bindings.playerRefs && playerRefs !== void 0)
+        $$bindings.playerRefs(playerRefs);
+      if ($$props.votesRevealed === void 0 && $$bindings.votesRevealed && votesRevealed !== void 0)
+        $$bindings.votesRevealed(votesRevealed);
+      return `<ol>${each(players, (player) => {
+        return `${player && player.displayName ? `<li class="${"text-lg flex items-center gap-2 mb-1 " + escape(
+          player.id === sessionUserId ? "font-bold text-lime-300" : "",
+          true
+        )}"${add_attribute("data-test-id", `user-${player.id}`, 0)}><button class="underline cursor-pointer text-orange-300 hover:text-orange-200 transition-colors px-1 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"${add_attribute("title", `Throw an emoji at ${player.displayName}!`, 0)}${add_attribute("aria-label", `Throw an emoji at ${player.displayName}`, 0)} tabindex="0"${add_attribute("this", playerRefs[player.id], 0)}>${escape(player.displayName)}</button>
+				: <span class="text-aqua-200">${escape(votesRevealed || player.id === sessionUserId ? player.currentVote || "\u2014" : "\u2014")} ${!votesRevealed && player.currentVote ? `<span class="inline-block w-2 h-2 ml-2 rounded-full bg-lime-400 align-middle" title="Vote submitted"></span>` : ``}</span> ${thrownEmojis[player.id] ? `<span class="ml-2 animate-bounce text-2xl">${escape(thrownEmojis[player.id])}</span>` : ``} </li>` : ``}`;
+      })}</ol>`;
+    });
+    css$1 = {
+      code: ".fly-emoji.svelte-t5z84b{position:fixed;z-index:100;font-size:2.5rem;pointer-events:none;transition:transform var(--fly-duration, 0.9s) cubic-bezier(0.6,1.5,0.6,1), opacity var(--fly-duration, 0.9s);will-change:transform, opacity}.fly-emoji.flying.svelte-t5z84b{transform:scale(1.5) rotate(-20deg);opacity:0.8}.emoji-bounce.svelte-t5z84b{animation:svelte-t5z84b-emoji-bounce-off 0.5s cubic-bezier(.5,1.8,.5,1) forwards}@keyframes svelte-t5z84b-emoji-bounce-off{0%{transform:scale(1) rotate(0deg);opacity:1}20%{transform:scale(1.2, 0.8) rotate(-10deg)}40%{transform:scale(0.8, 1.2) rotate(10deg)}60%{transform:translateY(-30px) scale(1.1) rotate(-8deg)}80%{transform:translateY(-10px) scale(1) rotate(0deg)}100%{transform:translateY(-60px) scale(0.8) rotate(0deg);opacity:0}}",
+      map: null
+    };
+    EmojiThrower = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { flyingEmojis = [] } = $$props;
+      if ($$props.flyingEmojis === void 0 && $$bindings.flyingEmojis && flyingEmojis !== void 0)
+        $$bindings.flyingEmojis(flyingEmojis);
+      $$result.css.add(css$1);
+      return `${each(flyingEmojis, (fly) => {
+        return `${fly.bouncing ? `<span style="${"position:fixed;left:" + escape(fly.endX, true) + "px;top:" + escape(fly.endY, true) + "px;z-index:100;"}"><span class="fly-emoji select-none emoji-bounce svelte-t5z84b" style="font-size:2.5rem;">${escape(fly.emoji)}</span> </span>` : `<span class="${"fly-emoji select-none " + escape(fly.flying ? "flying" : "", true) + " svelte-t5z84b"}" style="${"left: 0; top: 0; transform: translate(" + escape(fly.flying ? fly.xStart : fly.endX, true) + "px, " + escape(fly.flying ? fly.yStart : fly.endY, true) + "px) " + escape(
+          fly.flying ? "scale(1.5) rotate(-20deg)" : "scale(1) rotate(0deg)",
+          true
+        ) + "; opacity: " + escape(fly.flying ? 0.8 : 1, true) + "; --fly-duration: 0.9s;"}">${escape(fly.emoji)} </span>`}`;
+      })}`;
+    });
+    css = {
+      code: ".fly-emoji.svelte-1dknjrm{position:fixed;z-index:100;font-size:2.5rem;pointer-events:none;transition:transform var(--fly-duration, 0.9s) cubic-bezier(0.6, 1.5, 0.6, 1),\n			opacity var(--fly-duration, 0.9s);will-change:transform, opacity}.fly-emoji.flying.svelte-1dknjrm{transform:scale(1.5) rotate(-20deg);opacity:0.8}.emoji-bounce.svelte-1dknjrm{animation:svelte-1dknjrm-emoji-bounce-off 0.5s cubic-bezier(0.5, 1.8, 0.5, 1) forwards}@keyframes svelte-1dknjrm-emoji-bounce-off{0%{transform:scale(1) rotate(0deg);opacity:1}20%{transform:scale(1.2, 0.8) rotate(-10deg)}40%{transform:scale(0.8, 1.2) rotate(10deg)}60%{transform:translateY(-30px) scale(1.1) rotate(-8deg)}80%{transform:translateY(-10px) scale(1) rotate(0deg)}100%{transform:translateY(-60px) scale(0.8) rotate(0deg);opacity:0}}",
+      map: null
+    };
+    EMOJI_FLY_X_OFFSET = 0.3;
+    EMOJI_FLY_Y_RANGE = 0.25;
+    EMOJI_FLY_DURATION = 0.9;
     Page3 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let $currentPointingSession, $$unsubscribe_currentPointingSession;
       let $currentUserProfile, $$unsubscribe_currentUserProfile;
@@ -9369,10 +9491,17 @@ var init_page_svelte3 = __esm({
       $$unsubscribe_currentUserProfile = subscribe(currentUserProfile, (value) => $currentUserProfile = value);
       let { data } = $$props;
       let { supabase, session } = data;
+      let realtimeChannel;
       let possibleNumbers = [];
-      const numberSelections = ["Fibonacci"];
-      let _numberSelection = numberSelections[0];
+      const numberSelections = ["Fibonacci", "T-Shirt Sizes"];
       let currentVote;
+      let thrownEmojis = {};
+      const emojiOptions = ["\u{1F345}", "\u{1F602}", "\u{1F389}", "\u{1F525}", "\u{1F44F}", "\u{1F631}", "\u{1F973}", "\u{1F4A9}"];
+      let flyingEmojis = [];
+      let playerRefs = {};
+      const EMOJI_LAND_OFFSET_Y = -8;
+      let showEmojiPicker = false;
+      let selectedEmoji = emojiOptions[0];
       async function syncPointingSession(session2) {
         console.debug("syncPointingSession", session2);
         currentPointingSession.set(session2.new);
@@ -9385,11 +9514,76 @@ var init_page_svelte3 = __esm({
           if (updatedSession.data) {
             currentPointingSession.set(updatedSession.data);
             console.log("synced game state", updatedSession);
+            if (realtimeChannel) {
+              realtimeChannel.send({
+                type: "broadcast",
+                event: "refresh-session",
+                payload: {
+                  from: session.user.id,
+                  timestamp: Date.now()
+                }
+              });
+            }
           }
           if (updatedSession.error) {
             console.error("error updating game state", updatedSession.error);
           }
         });
+      }
+      async function joinSessionWithRetry() {
+        let success = false;
+        let tries = 0;
+        while (!success && tries < 5) {
+          tries++;
+          const { data: latestSession, error: fetchError } = await supabase.from("PointingSession").select("*").eq("id", data.slug).single();
+          if (!latestSession || fetchError)
+            return;
+          const mergedPlayers = {
+            ...latestSession.game_state?.activePlayers || {}
+          };
+          mergedPlayers[session.user.id] = {
+            currentVote: "",
+            id: session.user.id,
+            displayName: $currentUserProfile.display_name
+          };
+          let mergedUsers = Array.isArray(latestSession.users) ? [...latestSession.users] : [];
+          if (!mergedUsers.includes(session.user.id)) {
+            mergedUsers.push(session.user.id);
+          }
+          const newLastUpdated = (/* @__PURE__ */ new Date()).toISOString();
+          const { error: updateError, data: updatedSession } = await supabase.from("PointingSession").update({
+            game_state: {
+              ...latestSession.game_state,
+              activePlayers: mergedPlayers
+            },
+            users: mergedUsers,
+            last_updated: newLastUpdated
+          }).eq("id", data.slug).eq("last_updated", latestSession.last_updated).select().single();
+          if (!updateError) {
+            success = true;
+            currentPointingSession.set({
+              ...latestSession,
+              game_state: {
+                ...latestSession.game_state,
+                activePlayers: mergedPlayers
+              },
+              users: mergedUsers,
+              last_updated: newLastUpdated
+            });
+            if (realtimeChannel) {
+              realtimeChannel.send({
+                type: "broadcast",
+                event: "refresh-session",
+                payload: {
+                  from: session.user.id,
+                  timestamp: Date.now()
+                }
+              });
+            }
+          } else {
+            await new Promise((res) => setTimeout(res, 100 * tries));
+          }
+        }
       }
       async function loadData() {
         await supabase.from("profiles").select("*").eq("id", session.user.id).limit(1).single().then((profile) => {
@@ -9399,44 +9593,105 @@ var init_page_svelte3 = __esm({
             currentUserProfile.set({ display_name: "default", temporary: true });
           }
         });
-        await supabase.from("PointingSession").select("*").eq("id", data.slug).single().then((pointingSession) => {
-          console.log("Got the pointing session", pointingSession);
-          if (pointingSession.data) {
-            supabase.channel(`${data.slug}`).on(
-              "postgres_changes",
-              {
-                event: "UPDATE",
-                schema: "public",
-                table: "PointingSession",
-                filter: `id=eq.${pointingSession.data.id}`
-              },
-              (payload) => syncPointingSession(payload)
-            ).subscribe();
-            if (Object.hasOwn(pointingSession.data.game_state.activePlayers, session.user.id)) {
-              console.log("syncing display name");
-              pointingSession.data.game_state.activePlayers[session.user.id] = {
-                ...pointingSession.data.game_state.activePlayers[session.user.id],
-                displayName: $currentUserProfile.display_name
-                // sync display name (incase user changed it!)
-              };
-            } else {
-              pointingSession.data.game_state.activePlayers[session.user.id] = {
-                currentVote: "",
-                id: session.user.id,
-                displayName: $currentUserProfile.display_name
-              };
-            }
-            currentPointingSession.set(pointingSession.data);
-            syncGameState();
-          } else {
-            goto("/");
-          }
-        });
+        await joinSessionWithRetry();
+        const { data: pointingSession } = await supabase.from("PointingSession").select("*").eq("id", data.slug).single();
+        if (pointingSession) {
+          realtimeChannel = supabase.channel(`${data.slug}`).on(
+            "postgres_changes",
+            {
+              event: "UPDATE",
+              schema: "public",
+              table: "PointingSession",
+              filter: `id=eq.${pointingSession.id}`
+            },
+            (payload) => syncPointingSession(payload)
+          ).subscribe();
+        }
       }
       let activePlayers = [];
+      function triggerEmojiThrow({ from, to, emoji }) {
+        const targetEl = playerRefs[to];
+        if (!targetEl)
+          return;
+        const targetRect = targetEl.getBoundingClientRect();
+        const endX = targetRect.left + targetRect.width / 2;
+        const endY = targetRect.top + targetRect.height / 2 + EMOJI_LAND_OFFSET_Y;
+        const screenW = window.innerWidth;
+        const screenH = window.innerHeight;
+        const xStart = endX + screenW * EMOJI_FLY_X_OFFSET;
+        const yOffset = (Math.random() - 0.5) * (screenH * EMOJI_FLY_Y_RANGE);
+        const yStart = screenH / 2 + yOffset;
+        const id = Math.random().toString(36).slice(2);
+        flyingEmojis = [
+          ...flyingEmojis,
+          {
+            emoji,
+            userId: to,
+            id,
+            xStart,
+            yStart,
+            endX,
+            endY,
+            flying: true,
+            bouncing: false
+          }
+        ];
+        setTimeout(
+          () => {
+            flyingEmojis = flyingEmojis.map((e3) => e3.id === id ? { ...e3, flying: false } : e3);
+          },
+          10
+        );
+        setTimeout(
+          () => {
+            flyingEmojis = flyingEmojis.map((e3) => e3.id === id ? { ...e3, bouncing: true } : e3);
+            thrownEmojis = { ...thrownEmojis, [to]: emoji };
+            setTimeout(
+              () => {
+                thrownEmojis = { ...thrownEmojis, [to]: null };
+              },
+              2e3
+            );
+          },
+          EMOJI_FLY_DURATION * 1e3
+        );
+        setTimeout(
+          () => {
+            flyingEmojis = flyingEmojis.filter((e3) => e3.id !== id);
+          },
+          (EMOJI_FLY_DURATION + 0.6) * 1e3
+        );
+      }
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
+      $$result.css.add(css);
       ({ supabase, session } = data);
+      {
+        if ($currentPointingSession && !$currentPointingSession.game_state) {
+          set_store_value(currentPointingSession, $currentPointingSession.game_state = {}, $currentPointingSession);
+        }
+      }
+      {
+        if ($currentPointingSession?.game_state && !$currentPointingSession.game_state.pointingSystem) {
+          set_store_value(currentPointingSession, $currentPointingSession.game_state.pointingSystem = numberSelections[0], $currentPointingSession);
+          syncGameState();
+        }
+      }
+      {
+        if ($currentPointingSession?.game_state?.pointingSystem) {
+          const numbersData = {
+            Fibonacci: {
+              name: "Fibonacci",
+              numbers: [1, 2, 3, 5, 8]
+            },
+            "T-Shirt Sizes": {
+              name: "T-Shirt Sizes",
+              numbers: ["XS", "S", "M", "L", "XL"]
+            }
+          };
+          possibleNumbers = numbersData[$currentPointingSession.game_state.pointingSystem]?.numbers || [];
+        }
+      }
       {
         if (session) {
           loadData();
@@ -9448,43 +9703,53 @@ var init_page_svelte3 = __esm({
         }
       }
       {
-        if (_numberSelection) {
-          const numbersData = {
-            Fibonacci: {
-              name: "Fibonacci",
-              numbers: [1, 2, 3, 5, 8]
+        if (realtimeChannel) {
+          realtimeChannel.on("broadcast", { event: "emoji-throw" }, (payload) => {
+            if (payload?.payload) {
+              triggerEmojiThrow(payload.payload);
             }
-          };
-          possibleNumbers = numbersData[_numberSelection].numbers;
+          });
+          realtimeChannel.on("broadcast", { event: "refresh-session" }, async (payload) => {
+            const { data: latestSession } = await supabase.from("PointingSession").select("*").eq("id", data.slug).single();
+            if (latestSession) {
+              currentPointingSession.set(latestSession);
+            }
+          });
+        }
+      }
+      {
+        {
+          for (const player of activePlayers) {
+            if (!playerRefs[player.id])
+              playerRefs[player.id] = null;
+          }
         }
       }
       $$unsubscribe_currentPointingSession();
       $$unsubscribe_currentUserProfile();
-      return `<div class="text-yellow-100 p-8 h-full flex flex-col justify-center items-center">${$currentPointingSession && session ? `<div class="grid grid-cols-3"><div><h1 class="text-3xl font-bold p-3"><h1><h3 class="font-bold text-2xl mb-2" data-svelte-h="svelte-1vfpxjc">Player Votes</h3> <ol>${each(activePlayers, (player) => {
-        return `${player.id === session.user.id ? `<li class="text-lg font-bold text-lime-300" data-test-id="${"user-" + escape(player.id, true)}">${escape(player.displayName)}: ${escape(player.currentVote)} </li>` : `<li class="text-lg" data-test-id="${"user-" + escape(player.id, true)}">${escape(player.displayName)}: ${escape(player.currentVote)} </li>`}`;
-      })}</ol></h1></h1></div> <div>Select your pointing system:
-				<ul>${each(numberSelections, (selection) => {
-        return `<li>${validate_component(Button, "Button").$$render(
-          $$result,
-          {
-            "aria-current": _numberSelection === selection,
-            "aria-label": selection,
-            selected: selection === _numberSelection
-          },
-          {},
-          {
-            default: () => {
-              return `${escape(selection)}`;
-            }
-          }
-        )} </li>`;
-      })}</ul> ${each(possibleNumbers, (number) => {
+      return `${data.session ? `<div class="p-8 min-h-full flex flex-col flex-grow justify-center items-center"><div class="container mx-auto p-2 text-center">${$currentUserProfile ? `` : `<div data-svelte-h="svelte-1ar43gj">Display name: loading...</div>`} <div class="grid grid-cols-3"><div class="flex flex-col items-start gap-2"><h3 class="font-bold text-2xl mb-2" data-svelte-h="svelte-1vfpxjc">Player Votes</h3> ${validate_component(PlayerList, "PlayerList").$$render(
+        $$result,
+        {
+          players: activePlayers,
+          sessionUserId: data.session.user.id,
+          thrownEmojis,
+          selectedEmoji,
+          playerRefs,
+          votesRevealed: $currentPointingSession?.game_state?.votesRevealed
+        },
+        {},
+        {}
+      )}</div> <div>${$currentPointingSession?.game_state ? `Select your pointing system:
+						<select${add_attribute("value", $currentPointingSession.game_state.pointingSystem, 0)} class="mb-4 px-4 py-2 rounded border-4 border-[#fe8019] bg-[#282828] text-[#ebdbb2] font-bold focus:outline-none focus:ring-2 focus:ring-[#fe8019] transition-all duration-150">${each(numberSelections, (selection) => {
+        return `<option${add_attribute("value", selection, 0)}>${escape(selection)}</option>`;
+      })}</select> <div class="flex gap-3 mt-2">${each(possibleNumbers, (number) => {
         return `${validate_component(Button, "Button").$$render(
           $$result,
           {
             "aria-current": currentVote === number,
             "aria-label": number,
-            selected: currentVote === number
+            selected: currentVote === number,
+            variant: "number"
           },
           {},
           {
@@ -9493,11 +9758,41 @@ var init_page_svelte3 = __esm({
             }
           }
         )}`;
-      })}</div> <div>${validate_component(Button, "Button").$$render($$result, {}, {}, {
+      })}</div>` : ``}</div> <div class="flex flex-col gap-2 items-stretch ml-8">${validate_component(Button, "Button").$$render($$result, { variant: "default" }, {}, {
         default: () => {
           return `Clear Votes`;
         }
-      })}</div></div>` : ``}</div> `;
+      })} ${validate_component(Button, "Button").$$render($$result, { variant: "default" }, {}, {
+        default: () => {
+          return `Show Votes`;
+        }
+      })}</div></div> <div class="mt-4 flex flex-col items-center">${validate_component(Button, "Button").$$render(
+        $$result,
+        {
+          class: "px-4 py-2 bg-orange-700 text-white rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400"
+        },
+        {},
+        {
+          default: () => {
+            return `Pick Emoji
+					<span class="ml-2 text-2xl">${escape(selectedEmoji)}</span>`;
+          }
+        }
+      )}</div> ${validate_component(EmojiPicker, "EmojiPicker").$$render(
+        $$result,
+        {
+          show: showEmojiPicker,
+          emojiOptions,
+          selectedEmoji
+        },
+        {},
+        {}
+      )}</div></div>` : ``} ${validate_component(EmojiThrower, "EmojiThrower").$$render($$result, { flyingEmojis }, {}, {})} ${each(flyingEmojis, (fly) => {
+        return `${fly.bouncing ? `<span style="${"position:fixed;left:" + escape(fly.endX, true) + "px;top:" + escape(fly.endY, true) + "px;z-index:100;"}"><span class="fly-emoji select-none emoji-bounce svelte-1dknjrm" style="font-size:2.5rem;">${escape(fly.emoji)}</span> </span>` : `<span class="${"fly-emoji select-none " + escape(fly.flying ? "flying" : "", true) + " svelte-1dknjrm"}" style="${"left: 0; top: 0; transform: translate(" + escape(fly.flying ? fly.xStart : fly.endX, true) + "px, " + escape(fly.flying ? fly.yStart : fly.endY, true) + "px) " + escape(
+          fly.flying ? "scale(1.5) rotate(-20deg)" : "scale(1) rotate(0deg)",
+          true
+        ) + "; opacity: " + escape(fly.flying ? 0.8 : 1, true) + "; --fly-duration: " + escape(EMOJI_FLY_DURATION, true) + "s;"}">${escape(fly.emoji)} </span>`}`;
+      })} `;
     });
   }
 });
@@ -9520,8 +9815,8 @@ var init__5 = __esm({
     index6 = 4;
     component5 = async () => component_cache5 ??= (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default;
     universal_id2 = "src/routes/points/[slug]/+page.js";
-    imports5 = ["_app/immutable/nodes/4.-DOq7YrX.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.-CUx3Znz.js", "_app/immutable/chunks/button.-pU9ajbt.js", "_app/immutable/chunks/singletons.MaZw7zGC.js", "_app/immutable/chunks/navigation.hGAhkB_k.js"];
-    stylesheets5 = [];
+    imports5 = ["_app/immutable/nodes/4.dIBWzJ3z.js", "_app/immutable/chunks/scheduler.wCkDe2Ta.js", "_app/immutable/chunks/index.LId1ysqj.js", "_app/immutable/chunks/button.kyY1xn4m.js", "_app/immutable/chunks/singletons.oEu8hZWU.js", "_app/immutable/chunks/navigation.sly37ktX.js"];
+    stylesheets5 = ["_app/immutable/assets/4.CSZfWrgk.css"];
     fonts5 = [];
   }
 });
@@ -9535,14 +9830,22 @@ var Page4;
 var init_page_svelte4 = __esm({
   ".svelte-kit/output/server/entries/pages/profile/_page.svelte.js"() {
     init_ssr();
+    init_stores();
     Page4 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let urlMsg;
+      let $page, $$unsubscribe_page;
+      $$unsubscribe_page = subscribe(page, (value) => $page = value);
       let { data } = $$props;
+      let message = "";
       let displayName = "";
       let email = "";
       let password = "";
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
-      return `${data.session ? `<div class="h-full flex justify-center items-center"><form class="p-6 rounded-lg w-full max-w-md">${``} <div class="mb-4"><label for="display-name" class="block mb-2" data-svelte-h="svelte-xvxr5t">Display Name</label> <input id="display-name" name="display_name" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Display Name"${add_attribute("value", displayName, 0)}></div> <div class="mb-4"><label for="email" class="block mb-2" data-svelte-h="svelte-5n7jdk">Email</label> <input id="email" name="email" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="me@example.com"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block mb-2" data-svelte-h="svelte-12yjkt4">New Password</label> <input id="password" name="password" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="new password"${add_attribute("value", password, 0)}></div> <button class="w-full p-3 bg-aqua text-white rounded-lg hover:bg-dim-aqua" data-svelte-h="svelte-1ibyomg">Save Changes</button> <button class="w-full mt-4 p-3 bg-red-500 text-white rounded-lg hover:bg-red-600" data-svelte-h="svelte-1k2o8tq">Sign out</button></form></div>` : ``}`;
+      urlMsg = $page.url.searchParams.get("msg") || "";
+      message = urlMsg || message;
+      $$unsubscribe_page();
+      return `${data.session ? `<div class="h-full flex justify-center items-center"><form class="p-6 rounded-lg w-full max-w-md">${message ? `<p class="text-2xl text-center border border-2">${escape(message)}</p>` : ``} <div class="mb-4"><label for="display-name" class="block mb-2" data-svelte-h="svelte-xvxr5t">Display Name</label> <input id="display-name" name="display_name" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Display Name"${add_attribute("value", displayName, 0)}></div> <div class="mb-4"><label for="email" class="block mb-2" data-svelte-h="svelte-5n7jdk">Email</label> <input id="email" name="email" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="me@example.com"${add_attribute("value", email, 0)}></div> <div class="mb-4"><label for="password" class="block mb-2" data-svelte-h="svelte-12yjkt4">New Password</label> <input id="password" name="password" class="w-full p-2 text-gray-900 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="new password"${add_attribute("value", password, 0)}></div> <button class="w-full p-3 bg-aqua text-white rounded-lg hover:bg-dim-aqua" data-svelte-h="svelte-1ibyomg">Save Changes</button> <button class="w-full mt-4 p-3 bg-red-500 text-white rounded-lg hover:bg-red-600" data-svelte-h="svelte-1k2o8tq">Sign out</button></form></div>` : ``}`;
     });
   }
 });
@@ -9561,7 +9864,7 @@ var init__6 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     index7 = 5;
     component6 = async () => component_cache6 ??= (await Promise.resolve().then(() => (init_page_svelte4(), page_svelte_exports4))).default;
-    imports6 = ["_app/immutable/nodes/5.61mgnmNK.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.-CUx3Znz.js", "_app/immutable/chunks/navigation.hGAhkB_k.js", "_app/immutable/chunks/singletons.MaZw7zGC.js"];
+    imports6 = ["_app/immutable/nodes/5.K1nemWiX.js", "_app/immutable/chunks/scheduler.wCkDe2Ta.js", "_app/immutable/chunks/index.LId1ysqj.js", "_app/immutable/chunks/navigation.sly37ktX.js", "_app/immutable/chunks/singletons.oEu8hZWU.js", "_app/immutable/chunks/stores.Mvdeo-Rc.js"];
     stylesheets6 = [];
     fonts6 = [];
   }
@@ -9771,7 +10074,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1735h15"
+  version_hash: "apttbm"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -13165,7 +13468,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set(["favicon.png"]),
     mimeTypes: { ".png": "image/png" },
     _: {
-      client: { "start": "_app/immutable/entry/start.jP0LVqu0.js", "app": "_app/immutable/entry/app.0_EUUb5-.js", "imports": ["_app/immutable/entry/start.jP0LVqu0.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/singletons.MaZw7zGC.js", "_app/immutable/entry/app.0_EUUb5-.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.XGLZWGdw.js", "_app/immutable/chunks/index.-CUx3Znz.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
+      client: { "start": "_app/immutable/entry/start.rhATXn0H.js", "app": "_app/immutable/entry/app.tmrVT-YE.js", "imports": ["_app/immutable/entry/start.rhATXn0H.js", "_app/immutable/chunks/scheduler.wCkDe2Ta.js", "_app/immutable/chunks/singletons.oEu8hZWU.js", "_app/immutable/entry/app.tmrVT-YE.js", "_app/immutable/chunks/preload-helper.0HuHagjb.js", "_app/immutable/chunks/scheduler.wCkDe2Ta.js", "_app/immutable/chunks/index.LId1ysqj.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
@@ -13217,7 +13520,7 @@ var manifest = (() => {
     }
   };
 })();
-var prerendered = /* @__PURE__ */ new Set(["/", "/__data.json", "/auth", "/auth/__data.json", "/profile", "/profile/__data.json"]);
+var prerendered = /* @__PURE__ */ new Set([]);
 
 // .svelte-kit/cloudflare-tmp/_worker.js
 async function e(e3, t2) {
