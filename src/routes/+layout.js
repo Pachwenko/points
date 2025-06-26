@@ -20,6 +20,23 @@ export const load = async ({ fetch, data, depends }) => {
 		data: { session }
 	} = await supabase.auth.getSession();
 
+	// If authenticated, check for profile
+	if (session?.user) {
+		const { data: profile } = await supabase
+			.from('profiles')
+			.select('*')
+			.eq('id', session.user.id)
+			.single();
+
+		if (
+			(!profile || !profile.display_name) &&
+			typeof window !== 'undefined' &&
+			!window.location.pathname.startsWith('/profile')
+		) {
+			window.location.href = '/profile?msg=Please%20create%20your%20profile!';
+		}
+	}
+
 	return { supabase, session };
 };
 
